@@ -1,4 +1,6 @@
 export project_name=interpreter
+export base_path=${PWD}
+export src_path=${base_path}/src
 
 function build(){
     echo Building
@@ -7,7 +9,7 @@ function build(){
     cmake ..
     make
     cd ..
-    echo build finished successfully
+    echo build finished
 }
 
 function run(){

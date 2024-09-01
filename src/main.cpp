@@ -1,5 +1,9 @@
 #include <iostream>
+#include <memory>
 
-int main(){
-    std::cout<<"Hello world!";
+#include "sourceReader/ConsoleReader.hpp"
+#include "sourceReader/FileReader.hpp"
+
+int main(int argc, char **argv)
+{
 }
