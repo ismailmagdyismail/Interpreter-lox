@@ -10,7 +10,7 @@ function build(){
     echo build finished successfully
 }
 
-function build_and_run(){
+function run(){
     build
     echo Running
     cd build
