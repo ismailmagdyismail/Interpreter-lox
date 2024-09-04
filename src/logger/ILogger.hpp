@@ -34,9 +34,9 @@ namespace Logging
         ILogger();
 
         void setLogLevel(const LOG_LEVEL &logLevel);
-        virtual void Log(const std::string &message) final;
-        virtual void Warn(const std::string &message) final;
-        virtual void Error(const std::string &message) final;
+        void Log(const std::string &message);
+        void Warn(const std::string &message);
+        void Error(const std::string &message);
 
         virtual ~ILogger() = default;
 
