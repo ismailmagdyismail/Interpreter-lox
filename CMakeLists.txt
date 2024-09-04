@@ -15,4 +15,6 @@ add_executable(
     src/main.cpp
     src/sourceReader/FileReader.cpp
     src/sourceReader/ConsoleReader.cpp
+    src/logger/ILogger.cpp
+    src/logger/ConsoleLogger.cpp
 )

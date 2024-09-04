@@ -2,3 +2,5 @@ build
 .o
 .idea
 .vscode
+.cache
+tests

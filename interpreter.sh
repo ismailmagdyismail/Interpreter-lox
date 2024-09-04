@@ -1,6 +1,7 @@
 export project_name=interpreter
 export base_path=${PWD}
 export src_path=${base_path}/src
+export test_path=${base_path}/tests
 
 function build(){
     echo Building
@@ -17,5 +18,11 @@ function run(){
     echo Running
     cd build
     ./${project_name}
+    cd ..
+}
+
+function makeClean(){
+    cd build
+    make clean
     cd ..
 }
