@@ -42,5 +42,5 @@ function makeClean()
 {
     cd ${build_path}
     make clean
-    cd..
+    cd ${working_dir}
 }
