@@ -2,7 +2,7 @@
 #include "logger/ILogger.hpp"
 #include <iostream>
 
-void ConsoleLogger::messagePrinter(const std::string &message, const Logging::LOG_LEVEL &messageLevel)
+void ConsoleLogger::messagePrinter(const std::string &message) const
 {
-    std::cout << "[" << Logging::stringfyLogLevel(messageLevel) << "]:" << message << '\n';
+    std::cout << message << '\n';
 }

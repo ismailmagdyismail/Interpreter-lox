@@ -1,40 +1,57 @@
 #include "logger/ILogger.hpp"
 
+std::string formatMessage(const std::string& message,const Logging::LOG_LEVEL& logLevel)
+{
+    return "[" + Logging::stringfyLogLevel(logLevel) + "]" + " : " + message;
+}
+
 Logging::ILogger::ILogger()
 {
     this->logLevel = Logging::LOG_LEVEL::Info;
+    this->enable();
 }
 
 void Logging::ILogger::setLogLevel(const LOG_LEVEL &logLevel)
 {
+    this->enable();
     this->logLevel = logLevel;
 }
 
-void Logging::ILogger::Log(const std::string &message)
+void Logging::ILogger::disable()
 {
-    if (this->logLevel != LOG_LEVEL::Info)
-    {
-        return;
-    }
-    this->messagePrinter(message, LOG_LEVEL::Info);
+    this->disabled = true;
 }
 
-void Logging::ILogger::Error(const std::string &message)
+void Logging::ILogger::enable()
 {
-    if (this->logLevel == LOG_LEVEL::Disabled)
-    {
-        return;
-    }
-    this->messagePrinter(message, LOG_LEVEL::Error);
+    this->disabled = false;
 }
 
-void Logging::ILogger::Warn(const std::string &message)
+void Logging::ILogger::Log(const std::string &message) const
 {
-    if (this->logLevel == LOG_LEVEL::Disabled || this->logLevel == LOG_LEVEL::Error)
+    if (this->logLevel != LOG_LEVEL::Info || this->disabled)
     {
         return;
     }
-    this->messagePrinter(message, LOG_LEVEL::Warning);
+    this->messagePrinter(formatMessage(message, LOG_LEVEL::Info));
+}
+
+void Logging::ILogger::Error(const std::string &message) const
+{
+    if(this->disabled)
+    {
+        return;
+    }
+    this->messagePrinter(formatMessage(message,LOG_LEVEL::Error));
+}
+
+void Logging::ILogger::Warn(const std::string &message) const
+{
+    if (this->logLevel == LOG_LEVEL::Error || this->disabled)
+    {
+        return;
+    }
+    this->messagePrinter(formatMessage(message,LOG_LEVEL::Warning));
 }
 
 void Logging::patternMatchLogLevel(const Logging::LOG_LEVEL &logLevel, const Logging::LogLevelPattenMatcher &callBacks)
@@ -67,11 +84,11 @@ std::string Logging::stringfyLogLevel(const LOG_LEVEL &logLevel)
     std::string logLevelStr = "";
 
     LogLevelPattenMatcher matcher{
-        .ErrorCallBack = [&logLevelStr]()
+        .ErrorCallBack = [&logLevelStr]() -> void
         { logLevelStr = "Error"; },
-        .WarningCallBack = [&logLevelStr]()
-        { logLevelStr = "Warning"; },
-        .InfoCallBack = [&logLevelStr]()
+        .WarningCallBack = [&logLevelStr]() -> void
+        { logLevelStr = "Warn"; },
+        .InfoCallBack = [&logLevelStr]() -> void
         { logLevelStr = "Info"; },
     };
     patternMatchLogLevel(logLevel, matcher);

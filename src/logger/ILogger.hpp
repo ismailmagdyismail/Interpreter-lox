@@ -11,7 +11,6 @@ namespace Logging
         Error,
         Warning,
         Info,
-        Disabled,
     };
 
     /*
@@ -33,18 +32,21 @@ namespace Logging
     public:
         ILogger();
 
+        void disable();
+        void enable();
         void setLogLevel(const LOG_LEVEL &logLevel);
-        void Log(const std::string &message);
-        void Warn(const std::string &message);
-        void Error(const std::string &message);
+        void Log(const std::string &message) const;
+        void Warn(const std::string &message) const;
+        void Error(const std::string &message) const;
 
         virtual ~ILogger() = default;
 
     protected:
-        virtual void messagePrinter(const std::string &message, const LOG_LEVEL &messageLevel) = 0;
+        virtual void messagePrinter(const std::string &message) const = 0;
 
     private:
         LOG_LEVEL logLevel;
+        bool disabled;
     };
 
 }
