@@ -4,7 +4,7 @@ build
 .vscode
 .cache
 tests
-.logs
-.logs.txt
+logs
 bin
 cmake-build-debug
+commit.sh

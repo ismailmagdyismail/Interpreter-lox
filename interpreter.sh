@@ -1,10 +1,25 @@
 export project_name=interpreter
-export root_path=${PWD}
-export src_path=${root_path}/src
-export test_path=${root_path}/tests
-export bin_path=${root_path}/bin
+export working_dir=${PWD}
 
-function build(){
+export src_dir=src
+export src_path=${root_path}/${src_dir}
+
+export test_dir=tests
+export test_path=${root_path}/${test_dir}
+
+export bin_dir=bin
+export bin_path=${root_path}/${bin_dir}
+
+export build_dir=build
+export build_path=${root_path}/${build_dir}
+
+function init()
+{
+    mkdir ${build_dir} ${bin_dir}
+}
+
+function build()
+{
     echo Building
     mkdir build
     cd build
@@ -14,16 +29,18 @@ function build(){
     echo build finished
 }
 
-function run(){
+function run()
+{
     build
     echo Running
-    cd ${bin_path}
-    ./${project_name}
-    cd ..
+    cd ${working_dir}
+    ./${bin_dir}/${project_name}
+    cd ${working_dir}
 }
 
-function makeClean(){
-    cd build
+function makeClean()
+{
+    cd ${build_path}
     make clean
-    cd ..
+    cd..
 }

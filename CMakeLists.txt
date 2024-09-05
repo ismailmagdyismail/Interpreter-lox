@@ -4,8 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(project_name $ENV{project_name})
+set(working_dir $ENV{working_dir})
 set(src_path $ENV{src_path})
-set(root_path $ENV{root_path})
 set(bin_path $ENV{bin_path})
 
 
