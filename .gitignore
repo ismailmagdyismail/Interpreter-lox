@@ -5,3 +5,6 @@ build
 .cache
 tests
 .logs
+.logs.txt
+bin
+cmake-build-debug

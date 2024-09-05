@@ -1,7 +1,8 @@
 export project_name=interpreter
-export base_path=${PWD}
-export src_path=${base_path}/src
-export test_path=${base_path}/tests
+export root_path=${PWD}
+export src_path=${root_path}/src
+export test_path=${root_path}/tests
+export bin_path=${root_path}/bin
 
 function build(){
     echo Building
@@ -16,7 +17,7 @@ function build(){
 function run(){
     build
     echo Running
-    cd build
+    cd ${bin_path}
     ./${project_name}
     cd ..
 }
