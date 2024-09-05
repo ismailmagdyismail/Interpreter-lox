@@ -2,7 +2,7 @@
 
 #include "logger/ILogger.hpp"
 
-class FileLogger : public Logging::ILogger
+class FileLogger final : public Logging::ILogger
 {
 public :
     FileLogger(const std::string& message);
