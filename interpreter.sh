@@ -50,4 +50,7 @@ function reset()
 {
     rm -rf ${bin_path}/*
     rm -rf ${build_path}/*
+    rm -rf .vscode
+    rm -rf .idea
+    rm -rf .cache
 }
