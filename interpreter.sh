@@ -16,10 +16,7 @@ export build_path=${working_dir}/${build_dir}
 export lib_dir=libs
 export lib_path=${working_dir}/${lib_dir}
 
-function init()
-{
-    mkdir ${build_dir} ${bin_dir}
-}
+mkdir ${build_dir} ${bin_dir}
 
 function build()
 {
@@ -51,6 +48,6 @@ function makeClean()
 
 function reset()
 {
-    rm -rf ${build_path}
-    rm -rf ${bin_path}
+    rm -rf ${bin_path}/*
+    rm -rf ${build_path}/*
 }
