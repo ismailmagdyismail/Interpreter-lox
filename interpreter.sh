@@ -2,16 +2,16 @@ export project_name=interpreter
 export working_dir=${PWD}
 
 export src_dir=src
-export src_path=${root_path}/${src_dir}
+export src_path=${working_dir}/${src_dir}
 
 export test_dir=tests
-export test_path=${root_path}/${test_dir}
+export test_path=${working_dir}/${test_dir}
 
 export bin_dir=bin
-export bin_path=${root_path}/${bin_dir}
+export bin_path=${working_dir}/${bin_dir}
 
 export build_dir=build
-export build_path=${root_path}/${build_dir}
+export build_path=${working_dir}/${build_dir}
 
 function init()
 {
