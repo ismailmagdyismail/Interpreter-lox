@@ -7,6 +7,7 @@ set(project_name $ENV{project_name})
 set(working_dir $ENV{working_dir})
 set(src_path $ENV{src_path})
 set(bin_path $ENV{bin_path})
+set(lib_path $ENV{lib_path})
 
 
 project(${project_name})
@@ -20,7 +21,6 @@ add_executable(
     src/main.cpp
     src/sourceReader/FileReader.cpp
     src/sourceReader/ConsoleReader.cpp
-    src/logger/ILogger.cpp
-    src/logger/ConsoleLogger.cpp
-    src/logger/FileLogger.cpp
 )
+
+target_link_libraries(${project_name} ${lib_path}/liblogger.a)

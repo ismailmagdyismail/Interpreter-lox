@@ -1,6 +1,6 @@
 #pragma once
 
-#include "logger/ILogger.hpp"
+#include "ILogger.hpp"
 
 class FileLogger final : public Logging::ILogger
 {
