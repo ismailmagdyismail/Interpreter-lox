@@ -12,9 +12,12 @@ set(lib_path $ENV{lib_path})
 
 project(${project_name})
 
+# output binaries path
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${bin_path})
 
+# source paths
 include_directories(${src_path})
+# paths for external libraries
 include_directories(${lib_path}/includes)
 
 
@@ -25,4 +28,6 @@ add_executable(
     src/sourceReader/ConsoleReader.cpp
 )
 
+
+# libraries to link against
 target_link_libraries(${project_name} ${lib_path}/liblogger.a)
