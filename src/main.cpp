@@ -1,6 +1,7 @@
-#include "libs/include/logger/ConsoleLogger.hpp"
-#include "libs/include/logger/FileLogger.hpp"
+#include "logger/ConsoleLogger.hpp"
 
 int main(int argc, char **argv)
 {
+    ConsoleLogger logger;
+    logger.Error("error");
 }

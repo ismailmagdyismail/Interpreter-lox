@@ -15,6 +15,8 @@ project(${project_name})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${bin_path})
 
 include_directories(${src_path})
+include_directories(${lib_path}/includes)
+
 
 add_executable(
     ${project_name}
