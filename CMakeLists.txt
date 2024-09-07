@@ -31,6 +31,7 @@ add_executable(
     ${src_path}/sourceReporter/IReportMessage.cpp
     ${src_path}/sourceReporter/LineDescriptor.cpp
     ${src_path}/sourceReporter/LineError.cpp
+    ${src_path}/sourceReporter/SourceReporter.cpp
 )
 
 

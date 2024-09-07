@@ -2,8 +2,8 @@
 
 namespace SourceReport
 {
-    LineDescriptor::LineDescriptor(const std::string& lineContent,const unsigned int& lineNumber)
-    :lineContent(lineContent),lineNumber_(lineNumber){}
+    LineDescriptor::LineDescriptor(const std::string &lineContent, const unsigned int &lineNumber)
+        : lineContent(lineContent), lineNumber_(lineNumber) {}
 
     unsigned int LineDescriptor::lineSize() const
     {
@@ -17,7 +17,7 @@ namespace SourceReport
 
     char LineDescriptor::getCharAt(unsigned int location) const
     {
-        if(location >= this->lineSize())
+        if (location >= this->lineSize())
         {
             return char();
         }
