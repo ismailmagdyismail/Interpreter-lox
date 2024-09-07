@@ -23,10 +23,16 @@ include_directories(${lib_path}/includes)
 
 add_executable(
     ${project_name}
-    src/main.cpp
-    src/sourceReader/FileReader.cpp
-    src/sourceReader/ConsoleReader.cpp
+    ${src_path}/main.cpp
+    ${src_path}/sourceReader/FileReader.cpp
+    ${src_path}/sourceReader/ConsoleReader.cpp
+    ${src_path}/lexer/Lexer.cpp
+    ${src_path}/tokens/Token.cpp
+    ${src_path}/sourceReporter/IReportMessage.cpp
+    ${src_path}/sourceReporter/LineDescriptor.cpp
+    ${src_path}/sourceReporter/LineError.cpp
 )
+
 
 
 # libraries to link against
