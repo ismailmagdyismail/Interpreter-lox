@@ -20,9 +20,9 @@
 static std::unique_ptr<Logging::ILogger> logger = std::make_unique<ConsoleLogger>();
 static std::unique_ptr<ISourceReader> sourceReader;
 
-static void runLexer(const std::string& source);
+static void runLexer(const std::string &source);
 static void runConsoleREPL();
-static void runReadFile(const std::string& fileName);
+static void runReadFile(const std::string &fileName);
 
 int main(int argc, char **argv)
 {
@@ -51,11 +51,11 @@ void runConsoleREPL()
     logger->Log("Reading from console\n");
     while (true)
     {
-        std::cout<<"> ";
+        std::cout << "> ";
         std::string input;
-        std::getline(std::cin,input);
+        std::getline(std::cin, input);
         logger->Log("Read line from console = " + input);
-        if(input == "-1")
+        if (input == "-1")
         {
             break;
         }
@@ -63,27 +63,26 @@ void runConsoleREPL()
     }
 }
 
-void runReadFile(const std::string& fileName)
+void runReadFile(const std::string &fileName)
 {
     logger->Log("Reading from Source files\n");
     std::string filePath = fileName;
-    if(filePath.find("source_files") == filePath.npos)
+    if (filePath.find("source_files") == filePath.npos)
     {
-        filePath = std::string("source_files/")  + filePath;
+        filePath = std::string("source_files/") + filePath;
     }
     sourceReader = std::move(std::make_unique<FileReader>(filePath));
     std::optional<std::string> sourceCode = sourceReader->read();
-    if(!sourceCode.has_value())
+    if (!sourceCode.has_value())
     {
         logger->Error("Could source code from this file path" + filePath);
         return;
     }
-    logger->Log("File contnent\n"+sourceCode.value());
+    logger->Log("File contnent\n" + sourceCode.value());
     runLexer(sourceCode.value());
 }
 
-
-void runLexer(const std::string& source)
+void runLexer(const std::string &source)
 {
     // Lexer lexer(source);
     // std::vector<Tokens::Token> tokens = lexer.scan();
