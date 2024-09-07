@@ -12,15 +12,17 @@
 #include "logger/ConsoleLogger.hpp"
 
 // source file readers
+#include "lox.hpp"
 #include "sourceReader/ISourceReader.hpp"
 #include "sourceReader/ConsoleReader.hpp"
 #include "sourceReader/FileReader.hpp"
+#include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
 
 static std::unique_ptr<Logging::ILogger> logger = std::make_unique<ConsoleLogger>();
 static std::unique_ptr<ISourceReader> sourceReader;
 
-static void runLexer(const std::string &source);
+static void run(const std::string &source);
 static void runConsoleREPL();
 static void runReadFile(const std::string &fileName);
 
@@ -59,7 +61,7 @@ void runConsoleREPL()
         {
             break;
         }
-        runLexer(input);
+        run(input);
     }
 }
 
@@ -79,11 +81,18 @@ void runReadFile(const std::string &fileName)
         return;
     }
     logger->Log("File contnent\n" + sourceCode.value());
-    runLexer(sourceCode.value());
+    run(sourceCode.value());
 }
 
-void runLexer(const std::string &source)
+void run(const std::string &source)
 {
-    // Lexer lexer(source);
-    // std::vector<Tokens::Token> tokens = lexer.scan();
+    Lexer lexer(source);
+    SourceReport::SourceReporter reporter;
+    Lox lox(std::move(lexer),std::move(reporter));
+    std::vector<Tokens::Token> tokens  = lox.runLexerPhase();
+    logger->Log("number of tokens = "+std::to_string(tokens.size()));
+    for(const auto& token : tokens)
+    {
+        logger->Log(std::string("Read token: ") + token.lexeme);
+    }
 }
