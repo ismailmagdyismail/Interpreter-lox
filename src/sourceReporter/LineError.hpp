@@ -8,9 +8,9 @@ namespace SourceReport
     class LineError : public IReportMessage
     {
         public:
-            std::string formatReport() override;
-            bool isValid() override;
-            bool isOfType(const ReportMessageType& messageType) override;
+            std::string formatReport() const override;
+            bool isValid() const override;
+            bool isOfType(const ReportMessageType& messageType) const override;
 
         private:
             std::string errorMessage;

@@ -5,19 +5,19 @@
 
 namespace SourceReport
 {
-    std::string LineError::formatReport()
+    std::string LineError::formatReport() const
     {
         return
         std::to_string(this->lineNumber())  + "|" + std::string("[Error]:") +
         this->errorMessage + ", at position " + std::to_string(this->errorPosition) ;
     }
 
-    bool LineError::isOfType(const ReportMessageType& messageType)
+    bool LineError::isOfType(const ReportMessageType& messageType) const
     {
         return messageType == ReportMessageType::Error;
     }
 
-    bool LineError::isValid()
+    bool LineError::isValid() const
     {
         return false;
     }

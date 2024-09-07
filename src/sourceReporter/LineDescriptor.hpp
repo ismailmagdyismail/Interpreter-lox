@@ -8,9 +8,9 @@ namespace SourceReport
     {
         public:
             LineDescriptor(const std::string& line,const unsigned int& linNumber);
-            char getCharAt(unsigned int location);
-            unsigned int lineSize();
-            unsigned int lineNumber();
+            char getCharAt(unsigned int location) const;
+            unsigned int lineSize() const;
+            unsigned int lineNumber() const;
         private:
             std::string lineContent;
             unsigned int lineNumber_;

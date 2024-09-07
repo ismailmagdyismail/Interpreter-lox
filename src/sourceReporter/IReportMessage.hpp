@@ -12,12 +12,12 @@ namespace SourceReport
         public:
             IReportMessage(const LineDescriptor& lineDesc);
 
-            virtual std::string formatReport() = 0;
-            virtual bool isValid() = 0;
-            virtual bool isOfType(const ReportMessageType& messageType) = 0;
-            char getCharAt(unsigned int location);
-            unsigned int lineSize();
-            unsigned int lineNumber();
+            virtual std::string formatReport() const = 0;
+            virtual bool isValid() const = 0;
+            virtual bool isOfType(const ReportMessageType& messageType) const = 0;
+            char getCharAt(unsigned int location) const;
+            unsigned int lineSize() const;
+            unsigned int lineNumber() const;
 
             virtual ~IReportMessage() = default;
         private:
