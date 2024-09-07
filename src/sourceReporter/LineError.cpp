@@ -5,7 +5,7 @@
 
 namespace SourceReport
 {
-    std::string LineError::report()
+    std::string LineError::formatReport()
     {
         return
         std::to_string(this->lineNumber())  + "|" + std::string("[Error]:") +

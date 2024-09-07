@@ -8,7 +8,7 @@ namespace SourceReport
     class LineError : public IReportMessage
     {
         public:
-            std::string report() override;
+            std::string formatReport() override;
             bool isValid() override;
             bool isOfType(const ReportMessageType& messageType) override;
 
