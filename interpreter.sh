@@ -31,10 +31,11 @@ function build()
 
 function run()
 {
+    local file_name=$1
     build
     echo Running
     cd ${working_dir}
-    ./${bin_dir}/${project_name}
+    ./${bin_dir}/${project_name} $file_name
     cd ${working_dir}
 }
 
