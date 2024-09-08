@@ -31,7 +31,7 @@ static std::unordered_map<std::string, Tokens::TokenType> singleCharTokens = {
     {"{",Tokens::TokenType::RIGHT_BRACE},
     {",",Tokens::TokenType::COMMA},
     {".",Tokens::TokenType::DOT},
-    {".",Tokens::TokenType::MINUS},
+    {"-",Tokens::TokenType::MINUS},
     {"+",Tokens::TokenType::PLUS},
     {";",Tokens::TokenType::SEMI_COLON},
     {"/",Tokens::TokenType::SLASH},
