@@ -86,9 +86,7 @@ void runReadFile(const std::string &fileName)
 
 void run(const std::string &source)
 {
-    Lexer lexer(source);
-    SourceReport::SourceReporter reporter;
-    Lox lox(std::move(lexer),std::move(reporter));
+    Lox lox((Lexer(source)),SourceReport::SourceReporter());
     std::vector<Tokens::Token> tokens  = lox.runLexerPhase();
     logger->Log("number of tokens = "+std::to_string(tokens.size()));
     for(const auto& token : tokens)

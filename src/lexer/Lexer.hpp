@@ -16,8 +16,10 @@ private:
     bool atEnd() const;
     bool hasNext() const ;
     char peekNext() const;
+    void scanStringLiteral(SourceReport::SourceReporter& reporter);
     void advance();
     std::string sourceCode;
     unsigned int currentIndex;
     unsigned int lineNumber;
+    std::vector<Tokens::Token> tokens;
 };

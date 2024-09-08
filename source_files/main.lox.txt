@@ -1,8 +1,14 @@
 // a comment that should be ignored by the lexerzz
 print "hello_word"
+print "test of a spaced string literal "
+print "test of a
+multi line string literal
+(more than one line)"
 var x = 10
 
 var y = 20
 // a comment that should be ignored by the lexer
 var z = 10 // another test for lexer to test comments
 var a // = 10 , any thing after "//" should be ignored here
+(()){}
+!*+-/=<> <= ==

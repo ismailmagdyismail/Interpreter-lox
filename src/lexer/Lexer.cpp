@@ -8,10 +8,12 @@
 
 #include "lexer/Lexer.hpp"
 #include "sourceReporter/IReportMessage.hpp"
+#include "sourceReporter/LineDescriptor.hpp"
 #include "sourceReporter/LineError.hpp"
 #include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
 
+#define DEFAULT_ERROR_POS 0
 
 bool isWhiteSpace(const char& charachtar)
 {
@@ -53,28 +55,47 @@ void Lexer::advance()
     this->currentIndex++;
 }
 
+
+// NOTE: more generic scanner than switching over each token type
+//  + easier to add new tokens
+//  - harder to understand
+//  TODO: might add support for 2 versions [Generic,simple with switch case]
+
 std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
 {
-    std::vector<Tokens::Token> tokens;
     std::string lexeme;
-    while (!this->atEnd())
+    while (!atEnd())
     {
         char charToProcess = this->sourceCode[this->currentIndex];
-        if(lexeme.empty() && (isWhiteSpace(charToProcess) || isNewLine(charToProcess)))
+        if(lexeme.empty() && (
+            isWhiteSpace(charToProcess) ||
+            isNewLine(charToProcess)) ||
+            charToProcess == '"'
+        )
         {
             this->lineNumber += isNewLine(charToProcess);
+            if(charToProcess == '"')
+            {
+                scanStringLiteral(reporter);
+                continue;
+            }
             advance();
             continue;
         }
         if(!lexeme.empty() && (
             isWhiteSpace(charToProcess) ||
             Tokens::isSingleCharToken(std::string(1,charToProcess)) ||
-            isNewLine(charToProcess)
+            isNewLine(charToProcess) ||
+            charToProcess == '"'
         ))
         {
             Tokens::Token token = Tokens::createToken(lexeme,this->lineNumber);
             tokens.push_back(token);
             lexeme.clear();
+            if(charToProcess == '"')
+            {
+                scanStringLiteral(reporter);
+            }
             continue;
         }
         lexeme += charToProcess;
@@ -99,7 +120,7 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
             tokens.push_back(token);
             lexeme.clear();
         }
-        this->advance();
+        advance();
     }
     if(!lexeme.empty())
     {
@@ -107,4 +128,30 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
         lexeme.clear();
     }
     return tokens;
+}
+
+void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
+{
+    advance();
+    char charToProcess = this->sourceCode[currentIndex];
+    std::string stringLiteral;
+    unsigned startingLineNumber  = this->lineNumber;
+    while (charToProcess != '"' && !atEnd())
+    {
+        if(isNewLine(charToProcess))
+        {
+            this->lineNumber++;
+        }
+        stringLiteral += charToProcess;
+        advance();
+        charToProcess = this->sourceCode[currentIndex];
+    }
+    if(charToProcess != '"')
+    {
+        SourceReport::LineError lineError(SourceReport::LineDescriptor("No Treminating \" was found",startingLineNumber),"",DEFAULT_ERROR_POS);
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        return;
+    }
+    advance();
+    this->tokens.push_back(Tokens::createToken(stringLiteral,this->lineNumber));
 }
