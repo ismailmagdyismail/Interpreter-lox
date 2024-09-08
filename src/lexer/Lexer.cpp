@@ -12,15 +12,22 @@
 #include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
 
-bool isNegligibleChar(const char& charachtar)
+#define LINE_FEED 10
+
+bool isWhiteSpace(const char& charachtar)
 {
-    return charachtar == ' ' || charachtar == '\n';
+    return charachtar == ' ' || charachtar == '\t' || charachtar == '\r';
+}
+
+bool isNewLine(const char& charachtar)
+{
+    return charachtar == '\n' || int(charachtar) == LINE_FEED;
 }
 
 Lexer::Lexer(const std::string& sourceCode):sourceCode{sourceCode}
 {
     this->currentIndex = 0;
-    this->lineNumber = 0;
+    this->lineNumber = 1;
 }
 
 bool Lexer::atEnd() const
@@ -54,12 +61,20 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
     while (!this->atEnd())
     {
         char charToProcess = this->sourceCode[this->currentIndex];
-        if(lexeme.empty() && isNegligibleChar(charToProcess))
+        if(isNewLine(charToProcess))
+        {
+            this->lineNumber++;
+        }
+        if(lexeme.empty() && (isWhiteSpace(charToProcess) || isNewLine(charToProcess)))
         {
             advance();
             continue;
         }
-        if(!lexeme.empty() && (charToProcess == ' ' || Tokens::isSingleCharToken(std::string(1,charToProcess))) )
+        if(!lexeme.empty() && (
+            isWhiteSpace(charToProcess) ||
+            Tokens::isSingleCharToken(std::string(1,charToProcess)) ||
+            isNewLine(charToProcess)
+        ))
         {
             Tokens::Token token = Tokens::createToken(lexeme,this->lineNumber);
             tokens.push_back(token);

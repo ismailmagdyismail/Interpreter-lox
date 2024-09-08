@@ -93,6 +93,6 @@ void run(const std::string &source)
     logger->Log("number of tokens = "+std::to_string(tokens.size()));
     for(const auto& token : tokens)
     {
-        logger->Log(std::string("Read token: ") + token.lexeme);
+        logger->Log(std::string("Read token: ") + token.lexeme + " on line : " + std::to_string(token.lineNumber));
     }
 }
