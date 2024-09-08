@@ -61,7 +61,6 @@ namespace Tokens
     }
     bool isSingleCharToken(const std::string &lexeme)
     {
-        std::cout<<"TESTIGN SINGLE TOKEN FRO "<<lexeme<<" " << (singleCharTokens.find(lexeme) != singleCharTokens.end()) <<'\n';
         return singleCharTokens.find(lexeme) != singleCharTokens.end();
     }
 

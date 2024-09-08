@@ -59,7 +59,6 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
             advance();
             continue;
         }
-        std::cout<<"HERE "<<charToProcess<<'\n';
         if(!lexeme.empty() && (charToProcess == ' ' || Tokens::isSingleCharToken(std::string(1,charToProcess))) )
         {
             Tokens::Token token = Tokens::createToken(lexeme,this->lineNumber);
