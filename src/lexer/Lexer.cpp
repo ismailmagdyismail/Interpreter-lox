@@ -37,7 +37,7 @@ char Lexer::peekNext() const
 {
     if(!hasNext())
     {
-        return ' ';
+        return '\0';
     }
     return this->sourceCode[this->currentIndex + 1];
 }
