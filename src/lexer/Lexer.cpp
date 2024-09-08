@@ -89,6 +89,15 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
                 lexeme += peekNext();
                 advance();
             }
+            else if(hasNext() && Tokens::isComment(lexeme + peekNext()))
+            {
+                lexeme.clear();
+                while (!isNewLine(peekNext()) && !atEnd())
+                {
+                    advance();
+                }
+                continue;
+            }
             Tokens::Token token = Tokens::createToken(lexeme,this->lineNumber);
             tokens.push_back(token);
             lexeme.clear();

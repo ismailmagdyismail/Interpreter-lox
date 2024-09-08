@@ -69,6 +69,11 @@ namespace Tokens
         return twoCharTokens.find(lexeme) != twoCharTokens.end();
     }
 
+    bool isComment(const std::string &lexeme)
+    {
+        return lexeme == "//";
+    }
+
     bool isKeyword(const std::string &lexeme)
     {
         return keyWordsTokens.find(lexeme) != keyWordsTokens.end();

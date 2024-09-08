@@ -67,6 +67,7 @@ namespace Tokens
     bool isStopWord(const std::string& lexeme);
     bool isSingleCharToken(const std::string& lexeme);
     bool isTwoCharToken(const std::string& lexeme);
+    bool isComment(const std::string& lexeme);
     bool isKeyword(const std::string& lexeme);
     bool isReserved(const std::string& lexeme);
     bool isMatching(const std::string& lexeme,TokenType tokenType);
