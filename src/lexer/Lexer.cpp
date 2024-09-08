@@ -12,7 +12,6 @@
 #include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
 
-#define LINE_FEED 10
 
 bool isWhiteSpace(const char& charachtar)
 {
@@ -21,7 +20,7 @@ bool isWhiteSpace(const char& charachtar)
 
 bool isNewLine(const char& charachtar)
 {
-    return charachtar == '\n' || int(charachtar) == LINE_FEED;
+    return int(charachtar) == 10;
 }
 
 Lexer::Lexer(const std::string& sourceCode):sourceCode{sourceCode}
@@ -61,12 +60,9 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
     while (!this->atEnd())
     {
         char charToProcess = this->sourceCode[this->currentIndex];
-        if(isNewLine(charToProcess))
-        {
-            this->lineNumber++;
-        }
         if(lexeme.empty() && (isWhiteSpace(charToProcess) || isNewLine(charToProcess)))
         {
+            this->lineNumber += isNewLine(charToProcess);
             advance();
             continue;
         }
@@ -92,9 +88,10 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
             else if(hasNext() && Tokens::isComment(lexeme + peekNext()))
             {
                 lexeme.clear();
-                while (!isNewLine(peekNext()) && !atEnd())
+                while (!isNewLine(charToProcess) && !atEnd())
                 {
                     advance();
+                    charToProcess = this->sourceCode[this->currentIndex];
                 }
                 continue;
             }
