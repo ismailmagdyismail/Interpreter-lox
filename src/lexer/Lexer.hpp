@@ -16,7 +16,9 @@ private:
     bool atEnd() const;
     bool hasNext() const ;
     char peekNext() const;
+    char current() const;
     void scanStringLiteral(SourceReport::SourceReporter& reporter);
+    void scanDigit(SourceReport::SourceReporter& reporter);
     void advance();
     std::string sourceCode;
     unsigned int currentIndex;
