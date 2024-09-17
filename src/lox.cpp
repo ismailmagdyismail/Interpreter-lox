@@ -2,18 +2,19 @@
 #include "lexer/Lexer.hpp"
 #include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
+#include <algorithm>
 #include <vector>
 
-Lox::Lox(const Lexer& lexer,const SourceReport::SourceReporter& sourceReporter)
-:lexer(lexer),sourceReporter(sourceReporter){}
+Lox::Lox(Lexer&& lexer,SourceReport::SourceReporter&& sourceReporter)
+:lexer(lexer),sourceReporter(std::move(sourceReporter)){}
 
 
 std::vector<Tokens::Token> Lox::runLexerPhase()
 {
-    return lexer.scan();
+    return lexer.scan(this->sourceReporter);
 }
 
 void Lox::runPipeline()
 {
-    std::vector<Tokens::Token> tokens = lexer.scan();
+    std::vector<Tokens::Token> tokens = lexer.scan(this->sourceReporter);
 }

@@ -32,6 +32,7 @@ add_executable(
     ${src_path}/sourceReporter/LineDescriptor.cpp
     ${src_path}/sourceReporter/LineError.cpp
     ${src_path}/sourceReporter/SourceReporter.cpp
+    ${src_path}/lox.cpp
 )
 
 

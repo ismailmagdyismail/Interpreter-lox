@@ -10,6 +10,9 @@ namespace SourceReport
     {
     public:
         SourceReporter() = default;
+        SourceReporter(const SourceReporter& other) = delete;
+        SourceReporter(SourceReporter&& other) = default;
+
         void addMessage(std::unique_ptr<IReportMessage> &&message);
         bool hasError() const;
         std::vector<std::string> formatReports(const ReportMessageType& messageType) const;

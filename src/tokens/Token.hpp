@@ -42,7 +42,7 @@ namespace Tokens
         CLASS,
         TRUE,
         FALSE,
-        FUN,
+        FUNCTION,
         FOR,
         WHILE,
         IF,
@@ -62,11 +62,15 @@ namespace Tokens
         std::string lexeme;
     };
 
+
     // TODO: consider adding this as a generalization for is single , two char tokens to be able to easily add new tokens , be extenssible
-    // bool isStopWord(const std::string& lexeme);
+    bool isStopWord(const std::string& lexeme);
     bool isSingleCharToken(const std::string& lexeme);
     bool isTwoCharToken(const std::string& lexeme);
+    bool isComment(const std::string& lexeme);
     bool isKeyword(const std::string& lexeme);
     bool isReserved(const std::string& lexeme);
-    std::optional<Token> createToken(const TokenType& tokenType,std::string lexeme);
+    bool isMatching(const std::string& lexeme,TokenType tokenType);
+    Token createToken(const TokenType &tokenType,const std::string& lexeme,const unsigned int& lineNumber);
+    Token createToken(const std::string& lexeme,const unsigned int& lineNumber);
 }
