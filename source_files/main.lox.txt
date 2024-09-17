@@ -10,5 +10,21 @@ var y = 20
 // a comment that should be ignored by the lexer
 var z = 10 // another test for lexer to test comments
 var a // = 10 , any thing after "//" should be ignored here
+var x = /*
+to be ignored
+*/
 (()){}
 !*+-/=<> <= ==
+
+/* this is a multi line comment
+- all this lines should be ignored by lexer
+- ignored
+- ignored */
+/*
+this is a multi line comment
+- all this lines should be ignored by lexer
+- ignored
+- ignored
+*/
+
+/* comment */

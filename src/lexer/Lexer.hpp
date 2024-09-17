@@ -20,7 +20,8 @@ private:
     void scanStringLiteral(SourceReport::SourceReporter& reporter);
     void scanDigit();
     void scanIdentifier();
-    void scanComment();
+    void scanSingleLineComment();
+    void scanMultiLineComment(SourceReport::SourceReporter& reporter);
     void advance();
     std::string sourceCode;
     unsigned int currentIndex;

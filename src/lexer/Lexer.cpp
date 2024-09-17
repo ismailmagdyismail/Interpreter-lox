@@ -64,7 +64,10 @@ char Lexer::current() const
 
 void Lexer::advance()
 {
-    this->currentIndex++;
+    if(!atEnd())
+    {
+        this->currentIndex++;
+    }
 }
 
 
@@ -92,9 +95,13 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
             // Generalization goes out of the window
             // Could be more generalized more if delegated to tokens , but less performant
             std::string TwoCharLexeme = std::string() + current() + peekNext();
-            if(Tokens::isComment(TwoCharLexeme))
+            if(Tokens::isSingleLineComment(TwoCharLexeme))
             {
-                scanComment();
+                scanSingleLineComment();
+            }
+            else if(Tokens::isMultiLineCommentStart(TwoCharLexeme))
+            {
+                scanMultiLineComment(reporter);
             }
             // Could be generalized to is StopWord / ValidToken to of arbitrary length
             else if(Tokens::isTwoCharToken(TwoCharLexeme))
@@ -127,7 +134,7 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
         }
         else
         {
-            SourceReport::LineError lineError(SourceReport::LineDescriptor("Undefined Token",lineNumber),"",DEFAULT_ERROR_POS);
+            SourceReport::LineError lineError(SourceReport::LineDescriptor("",lineNumber),"Undefined Token",DEFAULT_ERROR_POS);
             reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
             advance();
         }
@@ -136,12 +143,40 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
     return tokens;
 }
 
-void Lexer::scanComment()
+void Lexer::scanSingleLineComment()
 {
     while (!isNewLine(current()) && !atEnd())
     {
         advance();
     }
+}
+
+void Lexer::scanMultiLineComment(SourceReport::SourceReporter& reporter)
+{
+    // skip starting /*
+    unsigned int startingLineNumber = this->lineNumber;
+    advance();
+    advance();
+    while (
+        !atEnd() &&
+        !Tokens::isMultiLineCommentEnd(std::string(1,current()) + peekNext())
+    )
+    {
+        if(current() == '\n')
+        {
+            this->lineNumber++;
+        }
+        advance();
+    }
+    if(atEnd())
+    {
+        SourceReport::LineError lineError(SourceReport::LineDescriptor("",startingLineNumber),"Non Terminating comment",DEFAULT_ERROR_POS);
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        return;
+    }
+    // skip terminating */
+    advance();
+    advance();
 }
 
 void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
@@ -161,7 +196,7 @@ void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
     }
     if(current() != '"')
     {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor("No Treminating \" was found",startingLineNumber),"",DEFAULT_ERROR_POS);
+        SourceReport::LineError lineError(SourceReport::LineDescriptor("",startingLineNumber),"No Treminating \" was found",DEFAULT_ERROR_POS);
         reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
         return;
     }
