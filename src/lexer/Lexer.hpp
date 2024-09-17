@@ -18,7 +18,9 @@ private:
     char peekNext() const;
     char current() const;
     void scanStringLiteral(SourceReport::SourceReporter& reporter);
-    void scanDigit(SourceReport::SourceReporter& reporter);
+    void scanDigit();
+    void scanIdentifier();
+    void scanComment();
     void advance();
     std::string sourceCode;
     unsigned int currentIndex;

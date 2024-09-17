@@ -2,6 +2,7 @@
 #include <_ctype.h>
 #include <algorithm>
 #include <cctype>
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -74,73 +75,78 @@ void Lexer::advance()
 
 std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
 {
-    std::string lexeme;
     while (!atEnd())
     {
-        if(lexeme.empty() && (
-            isWhiteSpace(current()) ||
-            isNewLine(current())) ||
-            current() == '"'
-        )
+        if(isWhiteSpace(current()))
         {
-            this->lineNumber += isNewLine(current());
-            if(current() == '"')
-            {
-                scanStringLiteral(reporter);
-                continue;
-            }
             advance();
-            continue;
         }
-        if(!lexeme.empty() && (
-            isWhiteSpace(current()) ||
-            Tokens::isSingleCharToken(std::string(1,current())) ||
-            isNewLine(current()) ||
-            current() == '"'
-        ))
+        else if(isNewLine(current()))
         {
-            Tokens::Token token = Tokens::createToken(lexeme,this->lineNumber);
-            tokens.push_back(token);
-            lexeme.clear();
-            if(current() == '"')
+            this->lineNumber++;
+            advance();
+        }
+        else if(Tokens::isSingleCharToken(std::string(1,current())))
+        {
+            // LEAKY ABSTRACTION , how do you know the comment is of length 2 , SO
+            // Generalization goes out of the window
+            // Could be more generalized more if delegated to tokens , but less performant
+            std::string TwoCharLexeme = std::string() + current() + peekNext();
+            if(Tokens::isComment(TwoCharLexeme))
             {
-                scanStringLiteral(reporter);
+                scanComment();
             }
-            continue;
-        }
-        lexeme += current();
-        if(Tokens::isSingleCharToken(lexeme))
-        {
-            if(hasNext() && Tokens::isTwoCharToken(lexeme + peekNext()))
+            // Could be generalized to is StopWord / ValidToken to of arbitrary length
+            else if(Tokens::isTwoCharToken(TwoCharLexeme))
             {
-                lexeme += peekNext();
+                Tokens::Token token = Tokens::createToken(TwoCharLexeme,this->lineNumber);
+                tokens.push_back(token);
+                // skip two char keyword
+                advance();
                 advance();
             }
-            else if(hasNext() && Tokens::isComment(lexeme + peekNext()))
+            else
             {
-                lexeme.clear();
-                while (!isNewLine(current()) && !atEnd())
-                {
-                    advance();
-                }
-                continue;
+                Tokens::Token token = Tokens::createToken(std::string(1,current()),this->lineNumber);
+                tokens.push_back(token);
+                // skip two char keyword
+                advance();
             }
-            Tokens::Token token = Tokens::createToken(lexeme,this->lineNumber);
-            tokens.push_back(token);
-            lexeme.clear();
         }
+        else if(current() == '"')
+        {
+            scanStringLiteral(reporter);
+        }
+        else if(std::isdigit(current()))
+        {
+            scanDigit();
+        }
+        else if(std::isalpha(current()))
+        {
+            scanIdentifier();
+        }
+        else
+        {
+            SourceReport::LineError lineError(SourceReport::LineDescriptor("Undefined Token",lineNumber),"",DEFAULT_ERROR_POS);
+            reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+            advance();
+        }
+    }
+
+    return tokens;
+}
+
+void Lexer::scanComment()
+{
+    while (!isNewLine(current()) && !atEnd())
+    {
         advance();
     }
-    if(!lexeme.empty())
-    {
-        tokens.push_back(Tokens::createToken(lexeme,this->lineNumber));
-        lexeme.clear();
-    }
-    return tokens;
 }
 
 void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
 {
+    // starting "
     advance();
     std::string stringLiteral;
     unsigned startingLineNumber  = this->lineNumber;
@@ -159,6 +165,42 @@ void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
         reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
         return;
     }
+    // terminating "
     advance();
-    this->tokens.push_back(Tokens::createToken(stringLiteral,this->lineNumber));
+    this->tokens.push_back(Tokens::createToken(stringLiteral,startingLineNumber));
+}
+
+
+void Lexer::scanDigit()
+{
+    std::function<std::string()> parseDigits = [this]() -> std::string
+    {
+        std::string digits;
+        while (isdigit(current()) && !atEnd())
+        {
+            digits += current();
+            advance();
+        }
+        return digits;
+    };
+
+    std::string number = parseDigits();
+    if(current() == '.' && isdigit(peekNext()))
+    {
+        number += current();
+        advance();
+        number += parseDigits();
+    }
+    this->tokens.push_back(Tokens::createToken(number,this->lineNumber));
+}
+
+void Lexer::scanIdentifier()
+{
+    std::string identifier;
+    while (std::isalnum(current()) && !atEnd())
+    {
+        identifier += current();
+        advance();
+    }
+    this->tokens.push_back(Tokens::createToken(identifier,this->lineNumber));
 }

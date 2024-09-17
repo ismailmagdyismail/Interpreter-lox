@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     logger->Log("number of args passed "+ std::to_string(argc));
     for(int i = 0 ;i<argc;i++)
     {
-        logger->Log("Parameter "+std::to_string(i) +" is "+argv[i]);
+        logger->Log("Parameter "+std::to_string(i + 1) +" is "+argv[i]);
     }
     if(argc <= 1)
     {

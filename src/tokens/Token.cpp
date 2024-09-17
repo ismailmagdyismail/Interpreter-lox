@@ -39,7 +39,7 @@ static std::unordered_map<std::string, Tokens::TokenType> singleCharTokens = {
     {"!",Tokens::TokenType::BANG},
     {"=",Tokens::TokenType::ASSIGN},
     {">",Tokens::TokenType::GREATER},
-    {">",Tokens::TokenType::SMALLER},
+    {"<",Tokens::TokenType::SMALLER},
 };
 
 static std::unordered_map<std::string, Tokens::TokenType> twoCharTokens = {
@@ -94,7 +94,6 @@ namespace Tokens
                 .lineNumber = lineNumber,
             };
         }
-        // TODO: check for valid identifiers / nums / strings
         return Token{
             .tokenType = tokenType,
             .lexeme = lexeme,
@@ -129,7 +128,6 @@ namespace Tokens
                 .lineNumber = lineNumber,
             };
         }
-        // TODO: check for valid identifiers / nums / strings
         return {
             .tokenType = TokenType::IDENTFIER,
             .lexeme = lexeme,
