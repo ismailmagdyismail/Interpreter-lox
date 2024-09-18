@@ -1,0 +1,34 @@
+* operators and keywords
+    - ==
+    - !=
+    - =
+    - /
+    - *
+    - +
+    - -
+    - !
+    - >=
+    - <=
+    - <
+    - >
+    - .
+    - and
+    - Or
+    - class
+    - true
+    - false
+    - fun
+    - for
+    - while
+    - if
+    - else
+    - nil
+    - print
+    - return
+    - super
+    - this
+    - var
+
+* comments
+    - single line comments //
+    - multi line comments /* */

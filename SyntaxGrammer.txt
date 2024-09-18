@@ -1,0 +1,10 @@
+# this is the grammer defined for LOX language
+
+
+Expression -> Equality ;
+Equality -> Comparison (("!=" | "==" ) Comparison)* ;
+Comparison -> Trem ( (">=" | ">" | "<" | "<=" ) Term)* ;
+Term -> Factor ( ("+" | "-") Factor)* ;
+Factor -> Unary ( ("*" | "/") Unary)* ;
+Unary -> ("!" | "-") Unary | Primary ;
+Primary -> NUMBER | STRING | "true" | "false" | "nil"| "(" Expression ")"
