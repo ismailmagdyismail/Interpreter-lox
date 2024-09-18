@@ -23,6 +23,7 @@ private:
     void scanSingleLineComment();
     void scanMultiLineComment(SourceReport::SourceReporter& reporter);
     void advance();
+
     std::string sourceCode;
     unsigned int currentIndex;
     unsigned int lineNumber;

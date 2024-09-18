@@ -96,14 +96,8 @@ namespace Tokens
 
     Token createToken(const TokenType &tokenType,const std::string& lexeme,const unsigned int& lineNumber)
     {
-        if(isReserved(lexeme))
-        {
-            return Token{
-                .tokenType = tokenType,
-                .lexeme = lexeme,
-                .lineNumber = lineNumber,
-            };
-        }
+        // TODO: should add checks to avoid creating a reserved token with a lexeme that doesn't match it
+        // This problem would happend if two diff classes of tokens exist
         return Token{
             .tokenType = tokenType,
             .lexeme = lexeme,

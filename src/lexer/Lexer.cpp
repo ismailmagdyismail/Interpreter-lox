@@ -139,7 +139,8 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
             advance();
         }
     }
-
+    Tokens::Token eofToken = Tokens::createToken(Tokens::TokenType::END_OF_FILE,"",this->lineNumber);
+    tokens.push_back(eofToken);
     return tokens;
 }
 
