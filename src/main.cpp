@@ -22,7 +22,7 @@
 static std::unique_ptr<Logging::ILogger> logger = std::make_unique<ConsoleLogger>();
 static std::unique_ptr<ISourceReader> sourceReader;
 
-static void run(const std::string &source);
+static void runInterpreter(const std::string &source);
 static void runConsoleREPL();
 static void runReadFile(const std::string &fileName);
 
@@ -61,7 +61,7 @@ void runConsoleREPL()
         {
             break;
         }
-        run(input);
+        runInterpreter(input);
     }
 }
 
@@ -73,7 +73,7 @@ void runReadFile(const std::string &fileName)
     {
         filePath = std::string("source_files/") + filePath;
     }
-    sourceReader = std::move(std::make_unique<FileReader>(filePath));
+    sourceReader = std::make_unique<FileReader>(filePath);
     std::optional<std::string> sourceCode = sourceReader->read();
     if (!sourceCode.has_value())
     {
@@ -81,10 +81,10 @@ void runReadFile(const std::string &fileName)
         return;
     }
     logger->Log("File contnent\n" + sourceCode.value());
-    run(sourceCode.value());
+    runInterpreter(sourceCode.value());
 }
 
-void run(const std::string &source)
+void runInterpreter(const std::string &source)
 {
     Lox lox((Lexer(source)),SourceReport::SourceReporter());
     std::vector<Tokens::Token> tokens  = lox.runLexerPhase();
