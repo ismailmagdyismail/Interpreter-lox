@@ -11,7 +11,7 @@ namespace SourceReport
         this->reportMessages.push_back(std::move(message));
     }
 
-    std::vector<std::string> SourceReporter::formatReports(const ReportMessageType& messageType) const
+    std::vector<std::string> SourceReporter::formatReports(const ReportMessageLevel& messageType) const
     {
         std::vector<std::string> reports;
         for (auto &message : this->reportMessages)

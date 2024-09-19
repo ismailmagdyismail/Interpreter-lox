@@ -15,7 +15,7 @@ namespace SourceReport
 
         void addMessage(std::unique_ptr<IReportMessage> &&message);
         bool hasError() const;
-        std::vector<std::string> formatReports(const ReportMessageType& messageType) const;
+        std::vector<std::string> formatReports(const ReportMessageLevel& messageType) const;
 
     private:
         std::vector<std::unique_ptr<IReportMessage>> reportMessages;

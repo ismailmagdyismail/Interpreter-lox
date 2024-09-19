@@ -4,7 +4,7 @@
 
 namespace SourceReport
 {
-    enum class ReportMessageType
+    enum class ReportMessageLevel
     {
         Error,
     };
@@ -15,9 +15,7 @@ namespace SourceReport
 
         virtual std::string formatReport() const = 0;
         virtual bool isValid() const = 0;
-        virtual bool isOfType(const ReportMessageType &messageType) const = 0;
-        char getCharAt(unsigned int location) const;
-        unsigned int lineSize() const;
+        virtual bool isOfType(const ReportMessageLevel &messageType) const = 0;
         unsigned int lineNumber() const;
 
         virtual ~IReportMessage() = default;

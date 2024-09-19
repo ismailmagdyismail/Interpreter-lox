@@ -134,12 +134,13 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
         }
         else
         {
-            SourceReport::LineError lineError(SourceReport::LineDescriptor("",lineNumber),"Undefined Token",DEFAULT_ERROR_POS);
+            SourceReport::LineError lineError(SourceReport::LineDescriptor(lineNumber),"Undefined Token");
             reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
             advance();
         }
     }
-
+    Tokens::Token eofToken = Tokens::createToken(Tokens::TokenType::END_OF_FILE,"",this->lineNumber);
+    tokens.push_back(eofToken);
     return tokens;
 }
 
@@ -170,7 +171,7 @@ void Lexer::scanMultiLineComment(SourceReport::SourceReporter& reporter)
     }
     if(atEnd())
     {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor("",startingLineNumber),"Non Terminating comment",DEFAULT_ERROR_POS);
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(startingLineNumber),"Non Terminating comment");
         reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
         return;
     }
@@ -196,7 +197,7 @@ void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
     }
     if(current() != '"')
     {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor("",startingLineNumber),"No Treminating \" was found",DEFAULT_ERROR_POS);
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(startingLineNumber),"No Treminating \" was found");
         reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
         return;
     }

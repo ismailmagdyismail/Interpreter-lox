@@ -5,20 +5,18 @@
 
 namespace SourceReport
 {
-    LineError::LineError(const LineDescriptor &lineDescriptor, const std::string &errorMessage, const unsigned int &errorPosition)
-        : IReportMessage(lineDescriptor), errorMessage(errorMessage), errorPosition(errorPosition)
-    {
-    }
+    LineError::LineError(const LineDescriptor &lineDescriptor, const std::string &errorMessage)
+        : IReportMessage(lineDescriptor), errorMessage(errorMessage)
+    {}
 
     std::string LineError::formatReport() const
     {
-        return std::to_string(this->lineNumber()) + "|" + std::string("[Error]:") +
-               this->errorMessage + ", at position " + std::to_string(this->errorPosition);
+        return std::to_string(this->lineNumber()) + "|" + std::string("[Error]:") + this->errorMessage ;
     }
 
-    bool LineError::isOfType(const ReportMessageType &messageType) const
+    bool LineError::isOfType(const ReportMessageLevel &messageType) const
     {
-        return messageType == ReportMessageType::Error;
+        return messageType == ReportMessageLevel::Error;
     }
 
     bool LineError::isValid() const
