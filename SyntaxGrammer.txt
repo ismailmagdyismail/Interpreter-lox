@@ -3,7 +3,7 @@
 
 Expression -> Equality ;
 Equality -> Comparison (("!=" | "==" ) Comparison)* ;
-Comparison -> Trem ( (">=" | ">" | "<" | "<=" ) Term)* ;
+Comparison -> Term ( (">=" | ">" | "<" | "<=" ) Term)* ;
 Term -> Factor ( ("+" | "-") Factor)* ;
 Factor -> Unary ( ("*" | "/") Unary)* ;
 Unary -> ("!" | "-") Unary | Primary ;
