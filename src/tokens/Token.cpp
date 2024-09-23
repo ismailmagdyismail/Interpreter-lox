@@ -25,7 +25,7 @@ static std::unordered_map<std::string, Tokens::TokenType> keyWordsTokens = {
 };
 
 static std::unordered_map<std::string, Tokens::TokenType> singleCharTokens = {
-    {"(",Tokens::TokenType::lEFT_PARNTHESES},
+    {"(",Tokens::TokenType::LEFT_PARNTHESES},
     {")",Tokens::TokenType::RIGHT_PARNTHESES},
     {"{",Tokens::TokenType::LEFT_BRACE},
     {"{",Tokens::TokenType::RIGHT_BRACE},
