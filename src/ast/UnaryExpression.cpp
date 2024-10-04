@@ -14,7 +14,7 @@ UnaryExpression::UnaryExpression(Tokens::Token unaryOperator,std::unique_ptr<IEx
     this->operand = std::move(expression);
 }
 
-std::variant<std::string,std::monostate> UnaryExpression::accept(IVisitor &visitor) const
+std::any UnaryExpression::accept(IVisitor &visitor) const
 {
     return visitor.visitUnaryExpression(*this);
 }

@@ -12,7 +12,7 @@ GroupedExpression::GroupedExpression(std::unique_ptr<IExpression>&& groupedExpre
     this->groupedExpression = std::move(groupedExpression);
 }
 
-std::variant<std::string,std::monostate> GroupedExpression::accept(IVisitor &visitor) const
+std::any GroupedExpression::accept(IVisitor &visitor) const
 {
     return visitor.visitGroupedExpression(*this);
 }

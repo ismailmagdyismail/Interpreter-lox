@@ -11,6 +11,9 @@
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
+#include "utils/GenericType.hpp"
+
+
 #include <algorithm>
 #include <cstddef>
 #include <iostream>
@@ -33,5 +36,5 @@ void Lox::runPipeline()
     parser.setTokens(tokens);
     std::unique_ptr<Expression::IExpression> expression = parser.parse(this->sourceReporter);
     AstPrinter printer ;
-    std::cout<<std::get<std::string>(expression->accept(printer));
+    std::cout<<GenericType::toString(expression->accept(printer))<<'\n';
 }

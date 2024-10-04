@@ -6,7 +6,7 @@ using namespace Expression;
 
 LiteralExpression::LiteralExpression(std::any value) : value(value){}
 
-std::variant<std::string,std::monostate> LiteralExpression::accept(IVisitor &visitor) const
+std::any LiteralExpression::accept(IVisitor &visitor) const
 {
     return visitor.visitLiteralExpression(*this);
 }

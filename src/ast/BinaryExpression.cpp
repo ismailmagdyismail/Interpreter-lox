@@ -19,7 +19,7 @@ BinaryExpression::BinaryExpression(
     this->rightOperand = std::move(rightOperand);
 }
 
-std::variant<std::string,std::monostate> BinaryExpression::accept(IVisitor& visitor) const
+std::any BinaryExpression::accept(IVisitor& visitor) const
 {
     return visitor.visitBinaryExpression(*this);
 }

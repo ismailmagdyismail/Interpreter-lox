@@ -15,7 +15,7 @@ namespace Expression
             Tokens::Token binaryOperator,
             std::unique_ptr<IExpression>&& rightOperand
         );
-        std::variant<std::string,std::monostate> accept(IVisitor& visitor) const override;
+        std::any accept(IVisitor& visitor) const override;
         std::unique_ptr<IExpression> leftOperand;
         Tokens::Token binaryOperator;
         std::unique_ptr<IExpression> rightOperand;
