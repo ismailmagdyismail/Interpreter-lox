@@ -203,7 +203,7 @@ void Lexer::scanStringLiteral(SourceReport::SourceReporter& reporter)
     }
     // terminating "
     advance();
-    this->tokens.push_back(Tokens::createToken(stringLiteral,startingLineNumber));
+    this->tokens.push_back(Tokens::createToken(Tokens::TokenType::STRING,stringLiteral,startingLineNumber));
 }
 
 
@@ -227,7 +227,7 @@ void Lexer::scanDigit()
         advance();
         number += parseDigits();
     }
-    this->tokens.push_back(Tokens::createToken(number,this->lineNumber));
+    this->tokens.push_back(Tokens::createToken(Tokens::TokenType::NUMBER,number,this->lineNumber));
 }
 
 void Lexer::scanIdentifier()
@@ -238,5 +238,5 @@ void Lexer::scanIdentifier()
         identifier += current();
         advance();
     }
-    this->tokens.push_back(Tokens::createToken(identifier,this->lineNumber));
+    this->tokens.push_back(Tokens::createToken(Tokens::TokenType::IDENTFIER,identifier,this->lineNumber));
 }
