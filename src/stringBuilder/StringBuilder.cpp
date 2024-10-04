@@ -4,6 +4,7 @@
 StringBuilder& StringBuilder::add(const std::string &string)
 {
     this->str += string;
+    this->str += " ";
     return *this;
 }
 
@@ -11,6 +12,7 @@ StringBuilder& StringBuilder::add(const std::string &string)
 StringBuilder& StringBuilder::add(std::string &&string)
 {
     this->str += std::move(string);
+    this->str += " ";
     return *this;
 }
 
