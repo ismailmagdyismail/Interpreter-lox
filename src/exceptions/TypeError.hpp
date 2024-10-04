@@ -21,6 +21,7 @@ public:
                 .add(token.lexeme)
                 .add(std::string("At line"))
                 .add(std::to_string(token.lineNumber))
+                .add(this->message)
                 .build();
     }
 
