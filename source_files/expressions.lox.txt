@@ -1,0 +1,2 @@
+// currently only one expression can be parsed from the file , you can USE the REPL for muitlple expressions parsing
+10 == 10;

@@ -13,10 +13,12 @@
 
 // source file readers
 #include "lox.hpp"
+#include "parser/Parser.hpp"
 #include "sourceReader/ISourceReader.hpp"
 #include "sourceReader/ConsoleReader.hpp"
 #include "sourceReader/FileReader.hpp"
 #include "sourceReporter/SourceReporter.hpp"
+#include "stringBuilder/StringBuilder.hpp"
 #include "tokens/Token.hpp"
 
 static std::unique_ptr<Logging::ILogger> logger = std::make_unique<ConsoleLogger>();
@@ -28,7 +30,7 @@ static void runReadFile(const std::string &fileName);
 
 int main(int argc, char **argv)
 {
-    logger->Log("number of args passed "+ std::to_string(argc));
+    logger->Log("number of args passed " + std::to_string(argc));
     for(int i = 0 ;i<argc;i++)
     {
         logger->Log("Parameter "+std::to_string(i + 1) +" is "+argv[i]);
@@ -86,11 +88,16 @@ void runReadFile(const std::string &fileName)
 
 void runInterpreter(const std::string &source)
 {
-    Lox lox((Lexer(source)),SourceReport::SourceReporter());
-    std::vector<Tokens::Token> tokens  = lox.runLexerPhase();
-    logger->Log("number of tokens = "+std::to_string(tokens.size()));
-    for(const auto& token : tokens)
-    {
-        logger->Log(std::string("Read token: ") + token.lexeme + " on line : " + std::to_string(token.lineNumber));
-    }
+    Lox lox(
+        (Lexer(source)),
+        Parser(),
+        SourceReport::SourceReporter()
+    );
+    lox.runPipeline();
+    // std::vector<Tokens::Token> tokens  = lox.runLexerPhase();
+    // logger->Log("number of tokens = "+std::to_string(tokens.size()));
+    // for(const auto& token : tokens)
+    // {
+    //     logger->Log(std::string("Read token: ") + token.lexeme + " on line : " + std::to_string(token.lineNumber));
+    // }
 }
