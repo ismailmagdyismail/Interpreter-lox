@@ -16,10 +16,24 @@ export build_path=${working_dir}/${build_dir}
 export lib_dir=libs
 export lib_path=${working_dir}/${lib_dir}
 
-mkdir ${build_dir} ${bin_dir}
+
+
+function create_artifact_dir()
+{
+    if [ ! -d "$build_dir" ]; then
+         mkdir "${build_dir}"
+    fi
+
+    if [ ! -d "$bin_dir" ]; then
+         mkdir "${bin_dir}"
+    fi
+}
+create_artifact_dir
+
 
 function build()
 {
+    create_artifact_dir
     echo Building
     mkdir build
     cd build

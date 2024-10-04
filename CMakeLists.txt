@@ -15,10 +15,14 @@ project(${project_name})
 # output binaries path
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${bin_path})
 
-# source paths
+# include paths
 include_directories(${src_path})
+
 # paths for external libraries
 include_directories(${lib_path}/includes)
+
+# build version
+set(CMAKE_BUILD_TYPE Debug)
 
 
 add_executable(
@@ -33,6 +37,14 @@ add_executable(
     ${src_path}/sourceReporter/LineError.cpp
     ${src_path}/sourceReporter/SourceReporter.cpp
     ${src_path}/lox.cpp
+    ${src_path}/parser/Parser.cpp
+    ${src_path}/ast/BinaryExpression.cpp
+    ${src_path}/ast/UnaryExpression.cpp
+    ${src_path}/ast/LiteralExpression.cpp
+    ${src_path}/ast/GroupedExpression.cpp
+    ${src_path}/astFormatter/AstPrinter.cpp
+    ${src_path}/stringBuilder/StringBuilder.cpp
+    ${src_path}/utils/GenericType.cpp
 )
 
 

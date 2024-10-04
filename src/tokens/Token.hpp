@@ -8,7 +8,7 @@ namespace Tokens
     enum class TokenType
     {
         // Single-character tokens.
-        lEFT_PARNTHESES,  // (
+        LEFT_PARNTHESES,  // (
         RIGHT_PARNTHESES, // )
         LEFT_BRACE,  // {
         RIGHT_BRACE, // }

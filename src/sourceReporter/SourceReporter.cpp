@@ -31,9 +31,9 @@ namespace SourceReport
         {
             if (!message->isValid())
             {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
