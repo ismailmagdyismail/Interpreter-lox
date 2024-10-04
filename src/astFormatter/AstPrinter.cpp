@@ -7,13 +7,13 @@
 #include "ast/BinaryExpression.hpp"
 #include "ast/GroupedExpression.hpp"
 #include "stringBuilder/StringBuilder.hpp"
-#include "utils/GenericType.hpp"
+#include "object/Object.hpp"
 
 
 std::any AstPrinter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {
-    auto leftOperand  = GenericType::toString(binaryExpression.leftOperand->accept(*this));
-    auto rightOperand  = GenericType::toString(binaryExpression.rightOperand->accept(*this));
+    auto leftOperand  = Object::toString(binaryExpression.leftOperand->accept(*this));
+    auto rightOperand  = Object::toString(binaryExpression.rightOperand->accept(*this));
     return StringBuilder()
             .add("(")
             .add(leftOperand)
@@ -28,7 +28,7 @@ std::any AstPrinter::visitUnaryExpression(const Expression::UnaryExpression &una
     return StringBuilder()
         .add("(")
         .add(unaryExpression.unaryOperator.lexeme)
-        .add(GenericType::toString(unaryExpression.operand->accept(*this)))
+        .add(Object::toString(unaryExpression.operand->accept(*this)))
         .add(")")
         .build();
 }
@@ -38,7 +38,7 @@ std::any AstPrinter::visitGroupedExpression(const Expression::GroupedExpression 
 {
     return StringBuilder()
             .add("(")
-            .add(GenericType::toString(groupedExpression.groupedExpression->accept(*this)))
+            .add(Object::toString(groupedExpression.groupedExpression->accept(*this)))
             .add(")")
             .build();
 }
@@ -46,6 +46,6 @@ std::any AstPrinter::visitGroupedExpression(const Expression::GroupedExpression 
 std::any AstPrinter::visitLiteralExpression(const Expression::LiteralExpression &literalExpression)
 {
     return StringBuilder()
-           .add(GenericType::toString(literalExpression.value))
+           .add(Object::toString(literalExpression.value))
            .build();
 }

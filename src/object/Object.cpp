@@ -1,7 +1,9 @@
 #include <any>
 #include <string>
 
-namespace GenericType
+#define precison
+
+namespace Object
 {
     std::string toString(const std::any& value) {
         if (!value.has_value()) {
@@ -11,7 +13,7 @@ namespace GenericType
             return std::to_string(std::any_cast<int>(value));
         }
         if (value.type() == typeid(double)) {
-            return std::to_string(std::any_cast<double>(value));
+            return std::to_string(std::any_cast<double>(value)).substr(0,2);
         }
         if (value.type() == typeid(std::string)) {
             return std::any_cast<std::string>(value);
@@ -19,7 +21,9 @@ namespace GenericType
         if (value.type() == typeid(float)) {
             return std::to_string(std::any_cast<float>(value));
         }
+        if (value.type() == typeid(bool)) {
+            return std::to_string(std::any_cast<bool>(value));
+        }
         return "Unsupported type";
     }
-
 }

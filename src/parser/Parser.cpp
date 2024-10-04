@@ -187,7 +187,7 @@ std::unique_ptr<Expression::IExpression> Parser::primary(SourceReport::SourceRep
         Tokens::Token numberLiteralToken = current();
         advance(); // skip number literal
         return std::make_unique<Expression::LiteralExpression>(
-            Expression::LiteralExpression(std::stoi(numberLiteralToken.lexeme))
+            Expression::LiteralExpression(std::stod(numberLiteralToken.lexeme))
         );
     }
     if(tokenType == Tokens::TokenType::STRING)
@@ -195,7 +195,7 @@ std::unique_ptr<Expression::IExpression> Parser::primary(SourceReport::SourceRep
         Tokens::Token stringLiteralToken = current();
         advance(); // skip string literal
         return std::make_unique<Expression::LiteralExpression>(
-            Expression::LiteralExpression(stringLiteralToken)
+            Expression::LiteralExpression(stringLiteralToken.lexeme)
         );
     }
     if(tokenType == Tokens::TokenType::LEFT_PARNTHESES)

@@ -8,6 +8,7 @@
 #include <vector>
 
 // logger
+#include "interpreter/Interpreter.hpp"
 #include "lexer/Lexer.hpp"
 #include "logger/ConsoleLogger.hpp"
 
@@ -91,13 +92,8 @@ void runInterpreter(const std::string &source)
     Lox lox(
         (Lexer(source)),
         Parser(),
+        Interpreter(),
         SourceReport::SourceReporter()
     );
     lox.runPipeline();
-    // std::vector<Tokens::Token> tokens  = lox.runLexerPhase();
-    // logger->Log("number of tokens = "+std::to_string(tokens.size()));
-    // for(const auto& token : tokens)
-    // {
-    //     logger->Log(std::string("Read token: ") + token.lexeme + " on line : " + std::to_string(token.lineNumber));
-    // }
 }
