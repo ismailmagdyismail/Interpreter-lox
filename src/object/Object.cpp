@@ -1,7 +1,7 @@
 #include <any>
 #include <string>
 
-#define precison
+#define PRECISON 5
 
 namespace Object
 {
@@ -13,7 +13,7 @@ namespace Object
             return std::to_string(std::any_cast<int>(value));
         }
         if (value.type() == typeid(double)) {
-            return std::to_string(std::any_cast<double>(value)).substr(0,2);
+            return std::to_string(std::any_cast<double>(value)).substr(0,PRECISON);
         }
         if (value.type() == typeid(std::string)) {
             return std::any_cast<std::string>(value);
