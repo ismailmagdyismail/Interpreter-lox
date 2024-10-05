@@ -44,7 +44,8 @@ add_executable(
     ${src_path}/ast/GroupedExpression.cpp
     ${src_path}/astFormatter/AstPrinter.cpp
     ${src_path}/stringBuilder/StringBuilder.cpp
-    ${src_path}/utils/GenericType.cpp
+    ${src_path}/object/Object.cpp
+    ${src_path}/interpreter/Interpreter.cpp
 )
 
 

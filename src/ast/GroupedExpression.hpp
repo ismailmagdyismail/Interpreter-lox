@@ -1,5 +1,6 @@
 #pragma once
 
+#include <any>
 #include <memory>
 
 #include "ast/IExpression.hpp"
@@ -10,7 +11,7 @@ namespace Expression
     {
     public:
         GroupedExpression(std::unique_ptr<IExpression>&& groupedExpression);
-        std::variant<std::string,std::monostate> accept(IVisitor &visitor) const override;
+        std::any accept(IVisitor &visitor) const override;
         std::unique_ptr<IExpression> groupedExpression;
     };
 }

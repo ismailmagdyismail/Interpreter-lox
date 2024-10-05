@@ -7,43 +7,45 @@
 #include "ast/BinaryExpression.hpp"
 #include "ast/GroupedExpression.hpp"
 #include "stringBuilder/StringBuilder.hpp"
-#include "utils/GenericType.hpp"
+#include "object/Object.hpp"
 
 
-std::variant<std::string,std::monostate> AstPrinter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
+std::any AstPrinter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {
+    auto leftOperand  = Object::toString(binaryExpression.leftOperand->accept(*this));
+    auto rightOperand  = Object::toString(binaryExpression.rightOperand->accept(*this));
     return StringBuilder()
             .add("(")
-            .add(std::get<std::string>(binaryExpression.leftOperand->accept(*this)))
+            .add(leftOperand)
             .add(binaryExpression.binaryOperator.lexeme)
-            .add(std::get<std::string>(binaryExpression.rightOperand->accept(*this)))
+            .add(rightOperand)
             .add(")")
             .build();
 }
 
-std::variant<std::string,std::monostate> AstPrinter::visitUnaryExpression(const Expression::UnaryExpression &unaryExpression)
+std::any AstPrinter::visitUnaryExpression(const Expression::UnaryExpression &unaryExpression)
 {
     return StringBuilder()
         .add("(")
         .add(unaryExpression.unaryOperator.lexeme)
-        .add(std::get<std::string>(unaryExpression.operand->accept(*this)))
+        .add(Object::toString(unaryExpression.operand->accept(*this)))
         .add(")")
         .build();
 }
 
 
-std::variant<std::string,std::monostate> AstPrinter::visitGroupedExpression(const Expression::GroupedExpression &groupedExpression)
+std::any AstPrinter::visitGroupedExpression(const Expression::GroupedExpression &groupedExpression)
 {
     return StringBuilder()
             .add("(")
-            .add(std::get<std::string>(groupedExpression.groupedExpression->accept(*this)))
+            .add(Object::toString(groupedExpression.groupedExpression->accept(*this)))
             .add(")")
             .build();
 }
 
-std::variant<std::string,std::monostate> AstPrinter::visitLiteralExpression(const Expression::LiteralExpression &literalExpression)
+std::any AstPrinter::visitLiteralExpression(const Expression::LiteralExpression &literalExpression)
 {
     return StringBuilder()
-           .add(GenericType::toString(literalExpression.value))
+           .add(Object::toString(literalExpression.value))
            .build();
 }
