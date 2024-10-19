@@ -110,7 +110,7 @@ std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &
         {
             return true;
         }
-        if(leftExpressionValue.has_value() || rightExpressionValue.has_value())
+        if(!leftExpressionValue.has_value() || !rightExpressionValue.has_value())
         {
             return false;
         }
