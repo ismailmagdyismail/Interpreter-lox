@@ -42,6 +42,7 @@ add_executable(
     ${src_path}/ast/UnaryExpression.cpp
     ${src_path}/ast/LiteralExpression.cpp
     ${src_path}/ast/GroupedExpression.cpp
+    ${src_path}/ast/TernaryExpression.cpp
     ${src_path}/astFormatter/AstPrinter.cpp
     ${src_path}/stringBuilder/StringBuilder.cpp
     ${src_path}/object/Object.cpp

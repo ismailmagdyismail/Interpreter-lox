@@ -40,6 +40,8 @@ static std::unordered_map<std::string, Tokens::TokenType> singleCharTokens = {
     {"=",Tokens::TokenType::ASSIGN},
     {">",Tokens::TokenType::GREATER},
     {"<",Tokens::TokenType::SMALLER},
+    {":",Tokens::TokenType::COLON},
+    {"?",Tokens::TokenType::QUESTION_MARK},
 };
 
 static std::unordered_map<std::string, Tokens::TokenType> twoCharTokens = {

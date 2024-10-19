@@ -1,6 +1,7 @@
 #include <any>
 #include <iostream>
 
+#include "ast/TernaryExpression.hpp"
 #include "exceptions/LoxError.hpp"
 #include "exceptions/TypeError.hpp"
 #include "interpreter/Interpreter.hpp"
@@ -131,30 +132,46 @@ std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &
     throw TypeError(binaryExpression.binaryOperator,"Operators Not recognized");
 }
 
-
+static bool isTruthy(std::any object)
+{
+    if(!object.has_value())
+    {
+        return false;
+    }
+    if(object.type() == typeid(bool))
+    {
+        return std::any_cast<bool>(object);
+    }
+    return true;
+}
 
 std::any Interpreter::visitUnaryExpression(const Expression::UnaryExpression &unaryExpression)
 {
     std::any expressionResult = unaryExpression.operand->accept(*this);
     if(unaryExpression.unaryOperator.tokenType == Tokens::TokenType::BANG)
     {
-        if(!expressionResult.has_value())
-        {
-            return true;
-        }
-        if(expressionResult.type() == typeid(bool))
-        {
-            return !std::any_cast<bool>(expressionResult);
-        }
-        return false;
+       return !isTruthy(expressionResult);
     }
-    else if(unaryExpression.unaryOperator.tokenType == Tokens::TokenType::MINUS)
+    if(unaryExpression.unaryOperator.tokenType == Tokens::TokenType::MINUS && Object::typeChecker<double>(expressionResult))
     {
         return -std::any_cast<double>(expressionResult);
     }
-    return nullptr;
+    if(unaryExpression.unaryOperator.tokenType == Tokens::TokenType::MINUS)
+    {
+        throw TypeError(unaryExpression.unaryOperator,"Cannot apply - to a non Numeric Operand");
+    }
+    throw TypeError(unaryExpression.unaryOperator,"Operators Not recognized");
 }
 
+std::any Interpreter::visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression)
+{
+    std::any condition = ternaryExpression.condition->accept(*this);
+    if(isTruthy(condition))
+    {
+        return ternaryExpression.trueExpression->accept(*this);
+    }
+    return ternaryExpression.falseExpression->accept(*this);
+}
 
 std::any Interpreter::visitGroupedExpression(const Expression::GroupedExpression &groupedExpression)
 {

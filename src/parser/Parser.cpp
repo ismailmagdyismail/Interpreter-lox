@@ -10,6 +10,7 @@
 
 #include "ast/GroupedExpression.hpp"
 #include "ast/LiteralExpression.hpp"
+#include "ast/TernaryExpression.hpp"
 #include "parser/Parser.hpp"
 #include "Parser.hpp"
 #include "ast/BinaryExpression.hpp"
@@ -70,7 +71,27 @@ std::unique_ptr<Expression::IExpression> Parser::parse(SourceReport::SourceRepor
 
 std::unique_ptr<Expression::IExpression> Parser::expression(SourceReport::SourceReporter& reporter)
 {
-    return equality(reporter);
+    return ternary(reporter);
+}
+
+std::unique_ptr<Expression::IExpression> Parser::ternary(SourceReport::SourceReporter& reporter)
+{
+    std::unique_ptr<Expression::IExpression> expression = equality(reporter);
+    while (current().tokenType == Tokens::TokenType::QUESTION_MARK)
+    {
+        advance(); // skip ?
+        std::unique_ptr<Expression::IExpression> truthBranch = equality(reporter);
+        if(current().tokenType != Tokens::TokenType::COLON)
+        {
+            throw std::runtime_error("No : was found for ternary operatry");
+        }
+        advance(); // skip :
+        std::unique_ptr<Expression::IExpression> falseBranch = equality(reporter);
+        expression = std::make_unique<Expression::TernaryExpression>(
+            Expression::TernaryExpression(std::move(expression),std::move(truthBranch),std::move(falseBranch))
+        );
+    }
+    return expression;
 }
 
 std::unique_ptr<Expression::IExpression> Parser::equality(SourceReport::SourceReporter& reporter)
