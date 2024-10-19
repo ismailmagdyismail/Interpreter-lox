@@ -15,4 +15,5 @@ private:
     std::any visitBinaryExpression(const Expression::BinaryExpression &binaryExpression) override;
     std::any visitGroupedExpression(const Expression::GroupedExpression &groupedExpression) override;
     std::any visitLiteralExpression(const Expression::LiteralExpression &literalExpression) override;
+    std::any visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression) override;
 };

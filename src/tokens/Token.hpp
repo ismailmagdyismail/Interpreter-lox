@@ -23,6 +23,8 @@ namespace Tokens
         ASSIGN, // =
         GREATER , // >
         SMALLER , // <
+        QUESTION_MARK ,
+        COLON ,
 
 
         // two character tokens.

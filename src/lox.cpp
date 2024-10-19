@@ -65,6 +65,6 @@ void Lox::runPipeline()
     }
     if(result.has_value())
     {
-        std::cout<<Object::toString(result);
+        std::cout<<Object::toString(result)<<'\n';
     }
 }

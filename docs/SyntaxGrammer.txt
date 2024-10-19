@@ -1,7 +1,8 @@
 # this is the grammer defined for LOX language
 
 
-Expression -> Equality ;
+Expression -> Ternary ;
+Ternary -> Equality ( "?" Equality ":" Ternary )* ;
 Equality -> Comparison (("!=" | "==" ) Comparison)* ;
 Comparison -> Term ( (">=" | ">" | "<" | "<=" ) Term)* ;
 Term -> Factor ( ("+" | "-") Factor)* ;
