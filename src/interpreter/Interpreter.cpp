@@ -34,9 +34,17 @@ std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &
 
     if(binaryExpression.binaryOperator.tokenType == Tokens::TokenType::PLUS)
     {
-        if(Object::typeChecker<std::string>(leftExpressionValue, rightExpressionValue))
+        if(Object::typeChecker<std::string>(leftExpressionValue,rightExpressionValue))
         {
             return std::any_cast<std::string>(leftExpressionValue) + std::any_cast<std::string>(rightExpressionValue);
+        }
+        if(Object::typeChecker<std::string>(leftExpressionValue) && Object::typeChecker<double>(rightExpressionValue))
+        {
+            return std::any_cast<std::string>(leftExpressionValue) + Object::toString(rightExpressionValue);
+        }
+        if(Object::typeChecker<double>(leftExpressionValue) && Object::typeChecker<std::string>(rightExpressionValue))
+        {
+            return Object::toString(leftExpressionValue) + Object::toString(rightExpressionValue);
         }
         if(Object::typeChecker<double>(leftExpressionValue, rightExpressionValue))
         {

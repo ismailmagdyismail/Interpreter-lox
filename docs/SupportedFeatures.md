@@ -1,4 +1,4 @@
-* operators and keywords
+# operators and keywords
     - ==
     - !=
     - =
@@ -29,6 +29,11 @@
     - this
     - var
 
-* comments
+# comments
     - single line comments //
     - multi line comments /* */
+
+
+# behaviour
+  - concatinating strings using + => if either of the operands is a string
+  -
