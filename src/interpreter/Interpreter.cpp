@@ -3,9 +3,11 @@
 #include <memory>
 #include <vector>
 
+#include "enviroment/Enviroment.hpp"
 #include "expressions/TernaryExpression.hpp"
 #include "exceptions/LoxError.hpp"
 #include "exceptions/TypeError.hpp"
+#include "expressions/VariableExpression.hpp"
 #include "interpreter/Interpreter.hpp"
 #include "expressions/BinaryExpression.hpp"
 #include "expressions/LiteralExpression.hpp"
@@ -16,8 +18,22 @@
 #include "statements/ExpressionStatement.hpp"
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
+#include "statements/VarStatement.hpp"
 #include "tokens/Token.hpp"
 #include "object/Object.hpp"
+
+static bool isTruthy(std::any object)
+{
+    if(!object.has_value())
+    {
+        return false;
+    }
+    if(object.type() == typeid(bool))
+    {
+        return std::any_cast<bool>(object);
+    }
+    return true;
+}
 
 void Interpreter::interpret(const std::vector<std::unique_ptr<Statement::IStatement>>& statements,SourceReport::SourceReporter& reporter)
 {
@@ -27,7 +43,7 @@ void Interpreter::interpret(const std::vector<std::unique_ptr<Statement::IStatem
         {
             statement->accept(*this);
         }
-        catch(TypeError& error)
+        catch(LoxError& error)
         {
             SourceReport::LineError lineError(SourceReport::LineDescriptor(error.token.lineNumber),error.errorMessage());
             reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
@@ -46,6 +62,13 @@ std::any Interpreter::visitPrintStatement(const Statement::PrintStatement& print
 {
     std::any value = printStatement.expression->accept(*this);
     std::cout<<Object::toString(value)<<'\n';
+    return nullptr;
+}
+
+std::any Interpreter::visitVarStatement(const Statement::VarStatement& varStatement)
+{
+    std::any value = varStatement.value->accept(*this);
+    enviroment.bind(varStatement.identifier, value);
     return nullptr;
 }
 
@@ -153,18 +176,7 @@ std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &
     throw TypeError(binaryExpression.binaryOperator,"Operators Not recognized");
 }
 
-static bool isTruthy(std::any object)
-{
-    if(!object.has_value())
-    {
-        return false;
-    }
-    if(object.type() == typeid(bool))
-    {
-        return std::any_cast<bool>(object);
-    }
-    return true;
-}
+
 
 std::any Interpreter::visitUnaryExpression(const Expression::UnaryExpression &unaryExpression)
 {
@@ -202,4 +214,9 @@ std::any Interpreter::visitGroupedExpression(const Expression::GroupedExpression
 std::any Interpreter::visitLiteralExpression(const Expression::LiteralExpression &literalExpression)
 {
     return literalExpression.value;
+}
+
+std::any Interpreter::visitVariableExpression(const Expression::VariableExpression &variableExpression)
+{
+    return enviroment.read(variableExpression.identifer);
 }

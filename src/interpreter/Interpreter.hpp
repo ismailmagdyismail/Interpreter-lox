@@ -4,6 +4,7 @@
 #include <memory>
 
 
+#include "enviroment/Enviroment.hpp"
 #include "expressions/IExpression.hpp"
 #include "expressions/IExpressionVisitor.hpp"
 #include "sourceReporter/SourceReporter.hpp"
@@ -20,7 +21,11 @@ private:
     std::any visitGroupedExpression(const Expression::GroupedExpression &groupedExpression) override;
     std::any visitLiteralExpression(const Expression::LiteralExpression &literalExpression) override;
     std::any visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression) override;
+    std::any visitVariableExpression(const Expression::VariableExpression &variableExpression) override;
 
     std::any visitExpressionStatement(const Statement::ExpressionStatement& expressionStatement) override;
     std::any visitPrintStatement(const Statement::PrintStatement &printStatement) override;
+    std::any visitVarStatement(const Statement::VarStatement &) override;
+
+    Enviroment enviroment;
 };

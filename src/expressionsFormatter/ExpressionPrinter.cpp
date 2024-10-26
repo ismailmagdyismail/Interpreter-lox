@@ -3,6 +3,7 @@
 #include <variant>
 
 #include "expressions/LiteralExpression.hpp"
+#include "expressions/VariableExpression.hpp"
 #include "expressionsFormatter/ExpressionPrinter.hpp"
 #include "expressions/UnaryExpression.hpp"
 #include "expressions/BinaryExpression.hpp"
@@ -70,5 +71,14 @@ std::any ExpressionPrinter::visitTernaryExpression(const Expression::TernaryExpr
            .add("(")
            .add(Object::toString(falseExpression))
            .add(")")
+           .build();
+}
+
+
+std::any ExpressionPrinter::visitVariableExpression(const Expression::VariableExpression &variableExpression)
+{
+
+    return StringBuilder()
+           .add(variableExpression.identifer.lexeme)
            .build();
 }

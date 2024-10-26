@@ -9,9 +9,11 @@
 #include <utility>
 #include <vector>
 
+#include "exceptions/ParserError.hpp"
 #include "expressions/GroupedExpression.hpp"
 #include "expressions/LiteralExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
+#include "expressions/VariableExpression.hpp"
 #include "parser/Parser.hpp"
 #include "Parser.hpp"
 #include "expressions/BinaryExpression.hpp"
@@ -23,10 +25,8 @@
 #include "statements/ExpressionStatement.hpp"
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
+#include "statements/VarStatement.hpp"
 #include "tokens/Token.hpp"
-
-Parser::Parser()
-{}
 
 void Parser::setTokens(const std::vector<Tokens::Token> &tokens)
 {
@@ -66,9 +66,55 @@ std::vector<std::unique_ptr<Statement::IStatement>> Parser::parse(SourceReport::
     std::vector<std::unique_ptr<Statement::IStatement>> statements;
     while (!atEnd())
     {
-        statements.push_back(statement(reporter));
+        statements.push_back(declration(reporter));
     }
     return statements;
+}
+
+std::unique_ptr<Statement::IStatement> Parser::declration(SourceReport::SourceReporter& reporter)
+{
+    try
+    {
+        if(current().tokenType == Tokens::TokenType::VAR)
+        {
+            return varDeclration(reporter);
+        }
+        return statement(reporter);
+    }
+    catch(const ParserError& error)
+    {
+        synchronize();
+        return nullptr;
+    }
+}
+
+std::unique_ptr<Statement::IStatement> Parser::varDeclration(SourceReport::SourceReporter& reporter)
+{
+    advance(); // skip var keyword
+    if(current().tokenType != Tokens::TokenType::IDENTFIER)
+    {
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excpected IDENTFIER");
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        throw ParserError(current(),"Excpected IDENTFIER");
+    }
+    Tokens::Token identifier = current();
+    advance(); // skipt Identifier
+    if(current().tokenType != Tokens::TokenType::ASSIGN)
+    {
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excpected =");
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        throw ParserError(current(),"Excpected =");
+    }
+    advance(); // skip =
+    auto value = expression(reporter);
+    if(current().tokenType != Tokens::TokenType::SEMI_COLON)
+    {
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excpected ;");
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        throw ParserError(current(),"Excpected ;");
+    }
+    advance(); // skip ;
+    return std::make_unique<Statement::VarStatement>(identifier,std::move(value));
 }
 
 std::unique_ptr<Statement::IStatement> Parser::statement(SourceReport::SourceReporter& reporter)
@@ -86,7 +132,9 @@ std::unique_ptr<Statement::IStatement> Parser::printStatement(SourceReport::Sour
     std::unique_ptr<Expression::IExpression> parsedExpression = expression(reporter);
     if(current().tokenType != Tokens::TokenType::SEMI_COLON)
     {
-        throw std::runtime_error("Excepected ;");
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excepected ;");
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        throw ParserError(current(),"Excepected ;");
     }
     advance(); // skip ;
     return std::make_unique<Statement::PrintStatement>(std::move(parsedExpression));
@@ -97,7 +145,9 @@ std::unique_ptr<Statement::IStatement> Parser::expressionStatement(SourceReport:
     std::unique_ptr<Expression::IExpression> parsedExpression = expression(reporter);
     if(current().tokenType != Tokens::TokenType::SEMI_COLON)
     {
-        throw std::runtime_error("Excepected ;");
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excepected ;");
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        throw ParserError(current(),"Excepected ;");
     }
     advance(); // skip ;
     return std::make_unique<Statement::ExpressionStatement>(std::move(parsedExpression));
@@ -119,7 +169,7 @@ std::unique_ptr<Expression::IExpression> Parser::ternary(SourceReport::SourceRep
         {
             SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Expect :");
             reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-            throw std::runtime_error("No : was found for ternary operatry");
+            throw ParserError(current(),"No : was found for ternary operatry");
         }
         advance(); // skip :
         std::unique_ptr<Expression::IExpression> falseBranch = equality(reporter);
@@ -247,6 +297,14 @@ std::unique_ptr<Expression::IExpression> Parser::primary(SourceReport::SourceRep
             Expression::LiteralExpression(std::stod(numberLiteralToken.lexeme))
         );
     }
+    if(tokenType == Tokens::TokenType::IDENTFIER)
+    {
+        Tokens::Token idenetifier = current();
+        advance();
+        return std::make_unique<Expression::VariableExpression>(
+            Expression::VariableExpression(idenetifier)
+        );
+    }
     if(tokenType == Tokens::TokenType::STRING)
     {
         Tokens::Token stringLiteralToken = current();
@@ -263,7 +321,7 @@ std::unique_ptr<Expression::IExpression> Parser::primary(SourceReport::SourceRep
         {
             SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"No closing ) was found");
             reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-            throw std::runtime_error("No closing ) was found");
+            throw ParserError(current(),"No closing ) was found");
         }
         advance(); // skip ending )
         return std::make_unique<Expression::GroupedExpression>(
@@ -272,7 +330,7 @@ std::unique_ptr<Expression::IExpression> Parser::primary(SourceReport::SourceRep
     }
     SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Expect expression");
     reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-    throw std::runtime_error("Expect expression");
+    throw ParserError(current(),"Expect expression");
 }
 
 void Parser::synchronize()

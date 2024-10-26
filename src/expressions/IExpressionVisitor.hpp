@@ -10,6 +10,7 @@ namespace Expression {
     class LiteralExpression;
     class GroupedExpression;
     class TernaryExpression;
+    class VariableExpression;
 }
 
 class IExpressionVisitor
@@ -24,6 +25,7 @@ public:
     virtual std::any visitLiteralExpression(const Expression::LiteralExpression& literalExpression) = 0 ;
     virtual std::any visitGroupedExpression(const Expression::GroupedExpression& groupedExpression) = 0 ;
     virtual std::any visitTernaryExpression(const Expression::TernaryExpression& ternaryExpression) = 0 ;
+    virtual std::any visitVariableExpression(const Expression::VariableExpression& variableExpression) = 0 ;
 
     virtual ~IExpressionVisitor() = default;
 };
