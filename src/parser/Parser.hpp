@@ -24,6 +24,7 @@ private:
     void synchronize();
 
     std::unique_ptr<Expression::IExpression> expression(SourceReport::SourceReporter& reporter);
+    std::unique_ptr<Expression::IExpression> assignment(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Expression::IExpression> ternary(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Expression::IExpression> equality(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Expression::IExpression> comparison(SourceReport::SourceReporter& reporter);

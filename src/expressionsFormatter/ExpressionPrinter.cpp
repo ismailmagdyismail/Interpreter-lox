@@ -9,6 +9,7 @@
 #include "expressions/BinaryExpression.hpp"
 #include "expressions/GroupedExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
+#include "expressions/AssignmentExpression.hpp"
 #include "stringBuilder/StringBuilder.hpp"
 #include "object/Object.hpp"
 
@@ -77,8 +78,21 @@ std::any ExpressionPrinter::visitTernaryExpression(const Expression::TernaryExpr
 
 std::any ExpressionPrinter::visitVariableExpression(const Expression::VariableExpression &variableExpression)
 {
-
     return StringBuilder()
+           .add("(")
            .add(variableExpression.identifer.lexeme)
+           .add(")")
+           .build();
+}
+
+std::any ExpressionPrinter::visitAssignmentExpression(const Expression::AssignmentExpression &assignmentExpression)
+{
+    std::string value = Object::toString(assignmentExpression.accept(*this));
+    return StringBuilder()
+           .add("(")
+           .add(assignmentExpression.idenetifier.lexeme)
+           .add("=")
+           .add(value)
+           .add(")")
            .build();
 }
