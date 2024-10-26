@@ -83,6 +83,8 @@ std::unique_ptr<Expression::IExpression> Parser::ternary(SourceReport::SourceRep
         std::unique_ptr<Expression::IExpression> truthBranch = equality(reporter);
         if(current().tokenType != Tokens::TokenType::COLON)
         {
+            SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Expect :");
+            reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
             throw std::runtime_error("No : was found for ternary operatry");
         }
         advance(); // skip :
