@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "ast/IExpression.hpp"
+#include "expressions/IExpression.hpp"
 #include "tokens/Token.hpp"
 
 namespace Expression
@@ -14,7 +14,7 @@ namespace Expression
             Tokens::Token unaryOperator,
             std::unique_ptr<IExpression>&& expression
         );
-        std::any accept(IVisitor &visitor) const override;
+        std::any accept(IExpressionVisitor &visitor) const override;
         Tokens::Token unaryOperator;
         std::unique_ptr<IExpression>operand;
     };

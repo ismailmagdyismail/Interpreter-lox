@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/IExpression.hpp"
+#include "expressions/IExpression.hpp"
 #include <any>
 
 namespace Expression
@@ -9,7 +9,7 @@ namespace Expression
     {
     public:
         LiteralExpression(std::any value);
-        std::any accept(IVisitor &visitor) const override;
+        std::any accept(IExpressionVisitor &visitor) const override;
         std::any value;
     };
 }

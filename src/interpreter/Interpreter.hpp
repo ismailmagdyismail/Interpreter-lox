@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ast/IExpression.hpp"
-#include "ast/IVisitor.hpp"
+#include "expressions/IExpression.hpp"
+#include "expressions/IExpressionVisitor.hpp"
 #include "sourceReporter/SourceReporter.hpp"
 #include <any>
 #include <memory>
 
-class Interpreter : IVisitor
+class Interpreter : IExpressionVisitor
 {
 public:
     std::any interpret(const std::unique_ptr<Expression::IExpression>& expression,SourceReport::SourceReporter& reporter);

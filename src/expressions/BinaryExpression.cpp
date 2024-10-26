@@ -1,10 +1,10 @@
 #include <algorithm>
 #include <memory>
 
-#include "ast/BinaryExpression.hpp"
-#include "ast/IExpression.hpp"
+#include "expressions/BinaryExpression.hpp"
+#include "expressions/IExpression.hpp"
 #include "tokens/Token.hpp"
-#include "ast/IVisitor.hpp"
+#include "expressions/IExpressionVisitor.hpp"
 
 using namespace Expression;
 
@@ -19,7 +19,7 @@ BinaryExpression::BinaryExpression(
     this->rightOperand = std::move(rightOperand);
 }
 
-std::any BinaryExpression::accept(IVisitor& visitor) const
+std::any BinaryExpression::accept(IExpressionVisitor& visitor) const
 {
     return visitor.visitBinaryExpression(*this);
 }

@@ -38,12 +38,12 @@ add_executable(
     ${src_path}/sourceReporter/SourceReporter.cpp
     ${src_path}/lox.cpp
     ${src_path}/parser/Parser.cpp
-    ${src_path}/ast/BinaryExpression.cpp
-    ${src_path}/ast/UnaryExpression.cpp
-    ${src_path}/ast/LiteralExpression.cpp
-    ${src_path}/ast/GroupedExpression.cpp
-    ${src_path}/ast/TernaryExpression.cpp
-    ${src_path}/astFormatter/AstPrinter.cpp
+    ${src_path}/expressions/BinaryExpression.cpp
+    ${src_path}/expressions/UnaryExpression.cpp
+    ${src_path}/expressions/LiteralExpression.cpp
+    ${src_path}/expressions/GroupedExpression.cpp
+    ${src_path}/expressions/TernaryExpression.cpp
+    ${src_path}/expressionsFormatter/ExpressionPrinter.cpp
     ${src_path}/stringBuilder/StringBuilder.cpp
     ${src_path}/object/Object.cpp
     ${src_path}/interpreter/Interpreter.cpp

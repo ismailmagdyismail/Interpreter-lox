@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ast/IVisitor.hpp"
+#include "expressions/IExpressionVisitor.hpp"
 #include <memory>
 
-class AstPrinter : public IVisitor
+class ExpressionPrinter : public IExpressionVisitor
 {
 public:
     std::any visitBinaryExpression(const Expression::BinaryExpression &binaryExpression) override;
