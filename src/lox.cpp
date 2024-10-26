@@ -53,13 +53,13 @@ void Lox::runPipeline()
     auto statements = parser.parse(this->sourceReporter);
     if(errorChecker(this->sourceReporter))
     {
-        std::cout<<"[Error]: error in parsing stage ";
+        std::cout<<"[Error]: error in parsing stage \n";
         return;
     }
     interpreter.interpret(statements,this->sourceReporter);
     if(errorChecker(this->sourceReporter))
     {
-        std::cout<<"[Error]: error in Interpreter stage ";
+        std::cout<<"[Error]: error in Interpreter stage \n";
         return;
     }
 }

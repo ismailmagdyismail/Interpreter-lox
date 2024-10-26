@@ -1,1 +1,6 @@
+var x = 10;
 print "hello world";
+print 5 + 20;
+print x;
+var y = 20;
+print y+x;

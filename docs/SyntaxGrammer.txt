@@ -1,6 +1,11 @@
 # this is the grammer defined for LOX language
 
-
+Program -> statement* EOF;
+declatration -> varDeclaration | statement;
+varDeclaration -> "var" IDENTIFIER "=" expression ";" ;
+statement -> expressionStatement | PrintStatement ;
+expressionStatement -> Expression ":" ;
+PrintStatement -> "print" expression ";" ;
 Expression -> Ternary ;
 Ternary -> Equality ( "?" Equality ":" Equality )* ;
 Equality -> Comparison (("!=" | "==" ) Comparison)* ;
@@ -8,4 +13,4 @@ Comparison -> Term ( (">=" | ">" | "<" | "<=" ) Term)* ;
 Term -> Factor ( ("+" | "-") Factor)* ;
 Factor -> Unary ( ("*" | "/") Unary)* ;
 Unary -> ("!" | "-") Unary | Primary ;
-Primary -> NUMBER | STRING | "true" | "false" | "nil"| "(" Expression ")"
+Primary -> NUMBER | STRING | "true" | "false" | "nil"| "(" Expression ")" | IDENTIFIER

@@ -11,5 +11,6 @@ public:
     std::any visitGroupedExpression(const Expression::GroupedExpression &groupedExpression) override;
     std::any visitLiteralExpression(const Expression::LiteralExpression &literalExpression) override;
     std::any visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression) override;
+    std::any visitVariableExpression(const Expression::VariableExpression &variableExpression) override;
 private:
 };
