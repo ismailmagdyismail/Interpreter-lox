@@ -1,11 +1,11 @@
 #include "lox.hpp"
-#include "ast/BinaryExpression.hpp"
-#include "ast/GroupedExpression.hpp"
-#include "ast/IExpression.hpp"
-#include "ast/IVisitor.hpp"
-#include "ast/LiteralExpression.hpp"
-#include "ast/UnaryExpression.hpp"
-#include "astFormatter/AstPrinter.hpp"
+#include "expressions/BinaryExpression.hpp"
+#include "expressions/GroupedExpression.hpp"
+#include "expressions/IExpression.hpp"
+#include "expressions/IExpressionVisitor.hpp"
+#include "expressions/LiteralExpression.hpp"
+#include "expressions/UnaryExpression.hpp"
+#include "expressionsFormatter/ExpressionPrinter.hpp"
 #include "interpreter/Interpreter.hpp"
 #include "lexer/Lexer.hpp"
 #include "parser/Parser.hpp"
@@ -55,7 +55,7 @@ void Lox::runPipeline()
     {
         return;
     }
-    AstPrinter printer ;
+    ExpressionPrinter printer ;
     std::cout<<Object::toString(expression->accept(printer))<<'\n';
 
     std::any result = interpreter.interpret(expression,this->sourceReporter);

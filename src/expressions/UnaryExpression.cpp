@@ -2,9 +2,9 @@
 #include <utility>
 #include <variant>
 
-#include "ast/UnaryExpression.hpp"
-#include "ast/IExpression.hpp"
-#include "ast/IVisitor.hpp"
+#include "expressions/UnaryExpression.hpp"
+#include "expressions/IExpression.hpp"
+#include "expressions/IExpressionVisitor.hpp"
 
 using namespace Expression;
 
@@ -14,7 +14,7 @@ UnaryExpression::UnaryExpression(Tokens::Token unaryOperator,std::unique_ptr<IEx
     this->operand = std::move(expression);
 }
 
-std::any UnaryExpression::accept(IVisitor &visitor) const
+std::any UnaryExpression::accept(IExpressionVisitor &visitor) const
 {
     return visitor.visitUnaryExpression(*this);
 }

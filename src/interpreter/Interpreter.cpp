@@ -1,14 +1,14 @@
 #include <any>
 #include <iostream>
 
-#include "ast/TernaryExpression.hpp"
+#include "expressions/TernaryExpression.hpp"
 #include "exceptions/LoxError.hpp"
 #include "exceptions/TypeError.hpp"
 #include "interpreter/Interpreter.hpp"
-#include "ast/BinaryExpression.hpp"
-#include "ast/LiteralExpression.hpp"
-#include "ast/UnaryExpression.hpp"
-#include "ast/GroupedExpression.hpp"
+#include "expressions/BinaryExpression.hpp"
+#include "expressions/LiteralExpression.hpp"
+#include "expressions/UnaryExpression.hpp"
+#include "expressions/GroupedExpression.hpp"
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
 #include "tokens/Token.hpp"

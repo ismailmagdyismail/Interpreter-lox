@@ -1,5 +1,5 @@
-#include "ast/TernaryExpression.hpp"
-#include "ast/IVisitor.hpp"
+#include "expressions/TernaryExpression.hpp"
+#include "expressions/IExpressionVisitor.hpp"
 
 using namespace Expression;
 
@@ -14,7 +14,7 @@ TernaryExpression::TernaryExpression(
     this->falseExpression = std::move(falseExpression);
 }
 
-std::any TernaryExpression::accept(IVisitor &visitor) const
+std::any TernaryExpression::accept(IExpressionVisitor &visitor) const
 {
     return visitor.visitTernaryExpression(*this);
 }

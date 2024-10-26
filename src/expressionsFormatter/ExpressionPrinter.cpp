@@ -2,17 +2,17 @@
 #include <iostream>
 #include <variant>
 
-#include "ast/LiteralExpression.hpp"
-#include "astFormatter/AstPrinter.hpp"
-#include "ast/UnaryExpression.hpp"
-#include "ast/BinaryExpression.hpp"
-#include "ast/GroupedExpression.hpp"
-#include "ast/TernaryExpression.hpp"
+#include "expressions/LiteralExpression.hpp"
+#include "expressionsFormatter/ExpressionPrinter.hpp"
+#include "expressions/UnaryExpression.hpp"
+#include "expressions/BinaryExpression.hpp"
+#include "expressions/GroupedExpression.hpp"
+#include "expressions/TernaryExpression.hpp"
 #include "stringBuilder/StringBuilder.hpp"
 #include "object/Object.hpp"
 
 
-std::any AstPrinter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
+std::any ExpressionPrinter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {
     auto leftOperand  = Object::toString(binaryExpression.leftOperand->accept(*this));
     auto rightOperand  = Object::toString(binaryExpression.rightOperand->accept(*this));
@@ -25,7 +25,7 @@ std::any AstPrinter::visitBinaryExpression(const Expression::BinaryExpression &b
             .build();
 }
 
-std::any AstPrinter::visitUnaryExpression(const Expression::UnaryExpression &unaryExpression)
+std::any ExpressionPrinter::visitUnaryExpression(const Expression::UnaryExpression &unaryExpression)
 {
     return StringBuilder()
         .add("(")
@@ -36,7 +36,7 @@ std::any AstPrinter::visitUnaryExpression(const Expression::UnaryExpression &una
 }
 
 
-std::any AstPrinter::visitGroupedExpression(const Expression::GroupedExpression &groupedExpression)
+std::any ExpressionPrinter::visitGroupedExpression(const Expression::GroupedExpression &groupedExpression)
 {
     return StringBuilder()
             .add("(")
@@ -45,14 +45,14 @@ std::any AstPrinter::visitGroupedExpression(const Expression::GroupedExpression 
             .build();
 }
 
-std::any AstPrinter::visitLiteralExpression(const Expression::LiteralExpression &literalExpression)
+std::any ExpressionPrinter::visitLiteralExpression(const Expression::LiteralExpression &literalExpression)
 {
     return StringBuilder()
            .add(Object::toString(literalExpression.value))
            .build();
 }
 
-std::any AstPrinter::visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression)
+std::any ExpressionPrinter::visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression)
 {
     std::any condition = ternaryExpression.condition->accept(*this);
     std::any trueExpression = ternaryExpression.trueExpression->accept(*this);

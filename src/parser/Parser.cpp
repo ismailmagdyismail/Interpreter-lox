@@ -8,14 +8,14 @@
 #include <string>
 #include <utility>
 
-#include "ast/GroupedExpression.hpp"
-#include "ast/LiteralExpression.hpp"
-#include "ast/TernaryExpression.hpp"
+#include "expressions/GroupedExpression.hpp"
+#include "expressions/LiteralExpression.hpp"
+#include "expressions/TernaryExpression.hpp"
 #include "parser/Parser.hpp"
 #include "Parser.hpp"
-#include "ast/BinaryExpression.hpp"
-#include "ast/IExpression.hpp"
-#include "ast/UnaryExpression.hpp"
+#include "expressions/BinaryExpression.hpp"
+#include "expressions/IExpression.hpp"
+#include "expressions/UnaryExpression.hpp"
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
 #include "sourceReporter/SourceReporter.hpp"

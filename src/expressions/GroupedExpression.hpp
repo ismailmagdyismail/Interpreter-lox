@@ -3,7 +3,7 @@
 #include <any>
 #include <memory>
 
-#include "ast/IExpression.hpp"
+#include "expressions/IExpression.hpp"
 
 namespace Expression
 {
@@ -11,7 +11,7 @@ namespace Expression
     {
     public:
         GroupedExpression(std::unique_ptr<IExpression>&& groupedExpression);
-        std::any accept(IVisitor &visitor) const override;
+        std::any accept(IExpressionVisitor &visitor) const override;
         std::unique_ptr<IExpression> groupedExpression;
     };
 }

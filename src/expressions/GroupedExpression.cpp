@@ -1,9 +1,9 @@
 #include <algorithm>
 #include <memory>
 
-#include "ast/GroupedExpression.hpp"
-#include "ast/IExpression.hpp"
-#include "ast/IVisitor.hpp"
+#include "expressions/GroupedExpression.hpp"
+#include "expressions/IExpression.hpp"
+#include "expressions/IExpressionVisitor.hpp"
 
 using namespace Expression;
 
@@ -12,7 +12,7 @@ GroupedExpression::GroupedExpression(std::unique_ptr<IExpression>&& groupedExpre
     this->groupedExpression = std::move(groupedExpression);
 }
 
-std::any GroupedExpression::accept(IVisitor &visitor) const
+std::any GroupedExpression::accept(IExpressionVisitor &visitor) const
 {
     return visitor.visitGroupedExpression(*this);
 }

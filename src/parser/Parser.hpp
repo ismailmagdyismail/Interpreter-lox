@@ -4,7 +4,7 @@
 #include <memory>
 #include <optional>
 
-#include "ast/IExpression.hpp"
+#include "expressions/IExpression.hpp"
 #include "sourceReporter/SourceReporter.hpp"
 #include "tokens/Token.hpp"
 

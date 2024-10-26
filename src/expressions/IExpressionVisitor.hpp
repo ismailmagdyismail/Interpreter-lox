@@ -12,7 +12,7 @@ namespace Expression {
     class TernaryExpression;
 }
 
-class IVisitor
+class IExpressionVisitor
 {
 public:
     /*
@@ -25,5 +25,5 @@ public:
     virtual std::any visitGroupedExpression(const Expression::GroupedExpression& groupedExpression) = 0 ;
     virtual std::any visitTernaryExpression(const Expression::TernaryExpression& ternaryExpression) = 0 ;
 
-    virtual ~IVisitor() = default;
+    virtual ~IExpressionVisitor() = default;
 };
