@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "expressions/GroupedExpression.hpp"
 #include "expressions/LiteralExpression.hpp"
@@ -19,6 +20,9 @@
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
 #include "sourceReporter/SourceReporter.hpp"
+#include "statements/ExpressionStatement.hpp"
+#include "statements/IStatement.hpp"
+#include "statements/PrintStatement.hpp"
 #include "tokens/Token.hpp"
 
 Parser::Parser()
@@ -57,16 +61,46 @@ void Parser::advance()
     }
 }
 
-std::unique_ptr<Expression::IExpression> Parser::parse(SourceReport::SourceReporter& reporter)
+std::vector<std::unique_ptr<Statement::IStatement>> Parser::parse(SourceReport::SourceReporter& reporter)
 {
-    try
+    std::vector<std::unique_ptr<Statement::IStatement>> statements;
+    while (!atEnd())
     {
-       return expression(reporter);
+        statements.push_back(statement(reporter));
     }
-    catch(const std::exception& exception)
+    return statements;
+}
+
+std::unique_ptr<Statement::IStatement> Parser::statement(SourceReport::SourceReporter& reporter)
+{
+    if(current().tokenType == Tokens::TokenType::PRINT)
     {
-        return nullptr;
+        return printStatement(reporter);
     }
+    return expressionStatement(reporter);
+}
+
+std::unique_ptr<Statement::IStatement> Parser::printStatement(SourceReport::SourceReporter& reporter)
+{
+    advance(); // skip print token
+    std::unique_ptr<Expression::IExpression> parsedExpression = expression(reporter);
+    if(current().tokenType != Tokens::TokenType::SEMI_COLON)
+    {
+        throw std::runtime_error("Excepected ;");
+    }
+    advance(); // skip ;
+    return std::make_unique<Statement::PrintStatement>(std::move(parsedExpression));
+}
+
+std::unique_ptr<Statement::IStatement> Parser::expressionStatement(SourceReport::SourceReporter& reporter)
+{
+    std::unique_ptr<Expression::IExpression> parsedExpression = expression(reporter);
+    if(current().tokenType != Tokens::TokenType::SEMI_COLON)
+    {
+        throw std::runtime_error("Excepected ;");
+    }
+    advance(); // skip ;
+    return std::make_unique<Statement::ExpressionStatement>(std::move(parsedExpression));
 }
 
 std::unique_ptr<Expression::IExpression> Parser::expression(SourceReport::SourceReporter& reporter)
