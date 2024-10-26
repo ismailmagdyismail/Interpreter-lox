@@ -74,13 +74,13 @@ void runReadFile(const std::string &fileName)
     std::string filePath = fileName;
     if (filePath.find("source_files") == filePath.npos)
     {
-        filePath = std::string("source_files/") + filePath;
+        filePath = std::string("lox_source_files/") + filePath;
     }
     sourceReader = std::make_unique<FileReader>(filePath);
     std::optional<std::string> sourceCode = sourceReader->read();
     if (!sourceCode.has_value())
     {
-        logger->Error("Could source code from this file path" + filePath);
+        logger->Error("Couldn't read source code from this file path" + filePath);
         return;
     }
     logger->Log("File contnent\n" + sourceCode.value());

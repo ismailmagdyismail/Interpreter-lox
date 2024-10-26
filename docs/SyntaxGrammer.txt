@@ -1,6 +1,9 @@
 # this is the grammer defined for LOX language
 
-
+Program -> statement* EOF;
+statement -> expressionStatement | PrintStatement ;
+expressionStatement -> Expression ":" ;
+PrintStatement -> "print" expression ";" ;
 Expression -> Ternary ;
 Ternary -> Equality ( "?" Equality ":" Equality )* ;
 Equality -> Comparison (("!=" | "==" ) Comparison)* ;
