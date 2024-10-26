@@ -1,5 +1,7 @@
 #include <any>
 #include <iostream>
+#include <memory>
+#include <vector>
 
 #include "expressions/TernaryExpression.hpp"
 #include "exceptions/LoxError.hpp"
@@ -11,21 +13,40 @@
 #include "expressions/GroupedExpression.hpp"
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
+#include "statements/ExpressionStatement.hpp"
+#include "statements/IStatement.hpp"
+#include "statements/PrintStatement.hpp"
 #include "tokens/Token.hpp"
 #include "object/Object.hpp"
 
-std::any Interpreter::interpret(const std::unique_ptr<Expression::IExpression>& expression,SourceReport::SourceReporter& reporter)
+void Interpreter::interpret(const std::vector<std::unique_ptr<Statement::IStatement>>& statements,SourceReport::SourceReporter& reporter)
 {
-    try
+    for(auto& statement : statements)
     {
-        return expression->accept(*this);
+        try
+        {
+            statement->accept(*this);
+        }
+        catch(TypeError& error)
+        {
+            SourceReport::LineError lineError(SourceReport::LineDescriptor(error.token.lineNumber),error.errorMessage());
+            reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        }
     }
-    catch(TypeError& error)
-    {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor(error.token.lineNumber),error.errorMessage());
-        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-        return nullptr;
-    }
+}
+
+std::any Interpreter::visitExpressionStatement(const Statement::ExpressionStatement& expressionStatement)
+{
+    std::any value = expressionStatement.expression->accept(*this);
+    return nullptr;
+}
+
+
+std::any Interpreter::visitPrintStatement(const Statement::PrintStatement& printStatement)
+{
+    std::any value = printStatement.expression->accept(*this);
+    std::cout<<Object::toString(value)<<'\n';
+    return nullptr;
 }
 
 std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)

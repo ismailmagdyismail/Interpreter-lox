@@ -50,21 +50,16 @@ void Lox::runPipeline()
         return;
     }
     parser.setTokens(tokens);
-    std::unique_ptr<Expression::IExpression> expression = parser.parse(this->sourceReporter);
+    auto statements = parser.parse(this->sourceReporter);
     if(errorChecker(this->sourceReporter))
     {
+        std::cout<<"[Error]: error in parsing stage ";
         return;
     }
-    ExpressionPrinter printer ;
-    std::cout<<Object::toString(expression->accept(printer))<<'\n';
-
-    std::any result = interpreter.interpret(expression,this->sourceReporter);
+    interpreter.interpret(statements,this->sourceReporter);
     if(errorChecker(this->sourceReporter))
     {
+        std::cout<<"[Error]: error in Interpreter stage ";
         return;
-    }
-    if(result.has_value())
-    {
-        std::cout<<Object::toString(result)<<'\n';
     }
 }
