@@ -20,15 +20,15 @@
 
 # Supported Features
   ## operators and keywords
-  - ternary operator
+  - ?: (ternary operator)
   - ==
   - !=
   - =
-  - /
-  - *
-  - +
-  - -
-  - !
+  - "/"
+  - "*"
+  - "+"
+  - "-"
+  - "!"
   - >=
   - <=
   - <
