@@ -1,6 +1,15 @@
-var x = 10;
+var x = 10; // global variable
 print "hello world";
 print 5 + 20;
 print x;
-var y = 20;
+var y = 20; // global variable
 print y+x;
+print 10 > 20;
+print 10 < 20;
+print 10 == 10 ? 1 : 0;
+print 10 > 10 ? "10>10" : 10 < 10 ? "10 < 10" : "10 == 10 ";
+var z = 10;
+print z;
+z = 20;
+print z;
+print x = 500;

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "enviroment/Enviroment.hpp"
+#include "expressions/AssignmentExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
 #include "exceptions/LoxError.hpp"
 #include "exceptions/TypeError.hpp"
@@ -19,6 +20,7 @@
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
 #include "statements/VarStatement.hpp"
+#include "stringBuilder/StringBuilder.hpp"
 #include "tokens/Token.hpp"
 #include "object/Object.hpp"
 
@@ -219,4 +221,13 @@ std::any Interpreter::visitLiteralExpression(const Expression::LiteralExpression
 std::any Interpreter::visitVariableExpression(const Expression::VariableExpression &variableExpression)
 {
     return enviroment.read(variableExpression.identifer);
+}
+
+
+std::any Interpreter::visitAssignmentExpression(const Expression::AssignmentExpression &assignmentExpression)
+{
+    // leaky abstraction of "=" token structure
+    std::any value = assignmentExpression.value->accept(*this);
+    enviroment.assign(assignmentExpression.idenetifier,value);
+    return value;
 }

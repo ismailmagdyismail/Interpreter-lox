@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "exceptions/ParserError.hpp"
+#include "expressions/AssignmentExpression.hpp"
 #include "expressions/GroupedExpression.hpp"
 #include "expressions/LiteralExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
@@ -155,7 +156,23 @@ std::unique_ptr<Statement::IStatement> Parser::expressionStatement(SourceReport:
 
 std::unique_ptr<Expression::IExpression> Parser::expression(SourceReport::SourceReporter& reporter)
 {
-    return ternary(reporter);
+    return assignment(reporter);
+}
+
+std::unique_ptr<Expression::IExpression> Parser::assignment(SourceReport::SourceReporter& reporter)
+{
+   auto lValue = ternary(reporter);
+   if(current().tokenType == Tokens::TokenType::ASSIGN)
+   {
+       advance(); // skip =
+       std::unique_ptr<Expression::IExpression> value = assignment(reporter);
+       auto variableExpression =  dynamic_cast<Expression::VariableExpression*>(lValue.get()) ;
+       if(variableExpression != nullptr)
+       {
+           return std::make_unique<Expression::AssignmentExpression>(Expression::AssignmentExpression(variableExpression->identifer,std::move(value)));
+       }
+   }
+   return lValue;
 }
 
 std::unique_ptr<Expression::IExpression> Parser::ternary(SourceReport::SourceReporter& reporter)
