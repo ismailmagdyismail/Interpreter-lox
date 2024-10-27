@@ -49,6 +49,7 @@ add_executable(
     ${src_path}/statements/ExpressionStatement.cpp
     ${src_path}/statements/PrintStatement.cpp
     ${src_path}/statements/VarStatement.cpp
+    ${src_path}/statements/BlockStatement.cpp
     ${src_path}/stringBuilder/StringBuilder.cpp
     ${src_path}/object/Object.cpp
     ${src_path}/interpreter/Interpreter.cpp

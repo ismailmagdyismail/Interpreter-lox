@@ -23,6 +23,7 @@
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
 #include "sourceReporter/SourceReporter.hpp"
+#include "statements/BlockStatement.hpp"
 #include "statements/ExpressionStatement.hpp"
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
@@ -67,12 +68,12 @@ std::vector<std::unique_ptr<Statement::IStatement>> Parser::parse(SourceReport::
     std::vector<std::unique_ptr<Statement::IStatement>> statements;
     while (!atEnd())
     {
-        statements.push_back(declration(reporter));
+        statements.push_back(declaration(reporter));
     }
     return statements;
 }
 
-std::unique_ptr<Statement::IStatement> Parser::declration(SourceReport::SourceReporter& reporter)
+std::unique_ptr<Statement::IStatement> Parser::declaration(SourceReport::SourceReporter& reporter)
 {
     try
     {
@@ -124,6 +125,10 @@ std::unique_ptr<Statement::IStatement> Parser::statement(SourceReport::SourceRep
     {
         return printStatement(reporter);
     }
+    if(current().tokenType == Tokens::TokenType::LEFT_BRACE)
+    {
+        return blockStatement(reporter);
+    }
     return expressionStatement(reporter);
 }
 
@@ -139,6 +144,22 @@ std::unique_ptr<Statement::IStatement> Parser::printStatement(SourceReport::Sour
     }
     advance(); // skip ;
     return std::make_unique<Statement::PrintStatement>(std::move(parsedExpression));
+}
+
+std::unique_ptr<Statement::IStatement> Parser::blockStatement(SourceReport::SourceReporter& reporter)
+{
+    advance(); // skip {
+    std::vector<std::unique_ptr<Statement::IStatement>> blockStatements;
+    while (!atEnd() && current().tokenType != Tokens::TokenType::RIGHT_BRACE)
+    {
+        blockStatements.push_back(declaration(reporter));
+    }
+    if(current().tokenType != Tokens::TokenType::RIGHT_BRACE)
+    {
+        throw ParserError(current(),"Excpected } to end block");
+    }
+    advance() ;// skip }
+    return std::make_unique<Statement::BlockStatement>(Statement::BlockStatement(std::move(blockStatements)));
 }
 
 std::unique_ptr<Statement::IStatement> Parser::expressionStatement(SourceReport::SourceReporter& reporter)

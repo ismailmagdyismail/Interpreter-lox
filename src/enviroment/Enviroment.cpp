@@ -1,32 +1,47 @@
+#include <memory>
 #include <stdexcept>
 
 #include "enviroment/Enviroment.hpp"
 #include "exceptions/RunTimeError.hpp"
 #include "tokens/Token.hpp"
 
-void Enviroment::bind(const Tokens::Token &symbol, std::any value)
+Environment::Environment(std::shared_ptr<Environment> parentEnviroment)
 {
-    if(enviroment.find(symbol.lexeme) != enviroment.end())
+    this->parentEnvironment = parentEnviroment;
+}
+
+void Environment::bind(const Tokens::Token &symbol, std::any value)
+{
+    if(environment.find(symbol.lexeme) != environment.end())
     {
         throw RunTimeError(symbol,"Symbol is already defined");
     }
-    enviroment[symbol.lexeme] = value;
+    environment[symbol.lexeme] = value;
 }
 
-void Enviroment::assign(const Tokens::Token &symbol, std::any value)
+void Environment::assign(const Tokens::Token &symbol, std::any value)
 {
-    if(enviroment.find(symbol.lexeme) == enviroment.end())
+    if(environment.find(symbol.lexeme) != environment.end())
     {
-        throw RunTimeError(symbol,"Symbol is not defined");
+        environment[symbol.lexeme] = value;
+        return;
     }
-    enviroment[symbol.lexeme] = value;
+    if(parentEnvironment == nullptr)
+    {
+        throw RunTimeError(symbol,"cannot assign, Symbol is not defined");
+    }
+    parentEnvironment->assign(symbol,value);
 }
 
-std::any Enviroment::read(const Tokens::Token &symbol)
+std::any Environment::read(const Tokens::Token &symbol)
 {
-    if(enviroment.find(symbol.lexeme) == enviroment.end())
+    if(environment.find(symbol.lexeme) != environment.end())
     {
-        throw RunTimeError(symbol,"Symbol is not defined");
+        return environment[symbol.lexeme];
     }
-    return enviroment[symbol.lexeme];
+    if(parentEnvironment == nullptr)
+    {
+        throw RunTimeError(symbol,"cannot read, Symbol is not defined");
+    }
+    return parentEnvironment->read(symbol);
 }

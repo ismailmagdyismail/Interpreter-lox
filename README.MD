@@ -2,12 +2,13 @@
 
 
 # Language Grammer
-- Program -> statement* EOF;
-- declatration -> varDeclaration | statement;
-- varDeclaration -> "var" IDENTIFIER "=" expression ";" ;
-- statement -> expressionStatement | PrintStatement ;
-- expressionStatement -> Expression ":" ;
+- Program -> Declaration* EOF;
+- Declaration -> VarDeclaration | Statement;
+- VarDeclaration -> "var" IDENTIFIER "=" expression ";" ;
+- Statement -> ExpressionStatement | PrintStatement | BlockStatement ;
+- ExpressionStatement -> Expression ":" ;
 - PrintStatement -> "print" expression ";" ;
+- BlockStatement -> "{" Declaration* "}" ;
 - Expression -> Assignment ;
 - Assignment -> IDENTIFIER "=" assignment | equality ;
 - Ternary -> Equality ( "?" Equality ":" Equality )* ;
@@ -58,7 +59,7 @@
 
   ## behaviour
   - concatinating strings using + => if either of the operands is a string
-  - no declration of variables without initilization
+  - no declration of variables without initilization (mandatory initilization)
 
 
 # Code Rules
