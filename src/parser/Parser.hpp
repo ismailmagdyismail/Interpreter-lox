@@ -33,10 +33,11 @@ private:
     std::unique_ptr<Expression::IExpression> unary(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Expression::IExpression> primary(SourceReport::SourceReporter& reporter);
 
-    std::unique_ptr<Statement::IStatement> declration(SourceReport::SourceReporter& reporter);
+    std::unique_ptr<Statement::IStatement> declaration(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Statement::IStatement> varDeclration(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Statement::IStatement> statement(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Statement::IStatement> printStatement(SourceReport::SourceReporter& reporter);
+    std::unique_ptr<Statement::IStatement> blockStatement(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Statement::IStatement> expressionStatement(SourceReport::SourceReporter& reporter);
 
     unsigned int currentIndex;

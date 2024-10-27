@@ -1,30 +1,37 @@
-// a comment that should be ignored by the lexerzz
-print "hello_word";
-print "test of a spaced string literal ";
-print "test of a;
-multi line string literal
-(more than one line)";
-var x = 10;
+var x = 10; // global variable
+print "hello world";
+print 5 + 20;
+print x;
+var y = 20; // global variable
+print y+x;
+print 10 > 20;
+print 10 < 20;
+print 10 == 10 ? 1 : 0;
+print 10 > 10 ? "10>10" : 10 < 10 ? "10 < 10" : "10 == 10 ";
+var z = 10;
+print z;
+z = 20;
+print z;
+print x = 500;
+print (1+20);
+print true;
 
-var y = 20;
-// a comment that should be ignored by the lexer
-var z = 10 ;// another test for lexer to test comments
-var a ;// = 10 , any thing after "//" should be ignored here
-var x ;= /*
-to be ignored
-*/
-//(()){}
-//!*+-/=<> <= ==
-
-/* this is a multi line comment
-- all this lines should be ignored by lexer
-- ignored
-- ignored */
-/*
-this is a multi line comment
-- all this lines should be ignored by lexer
-- ignored
-- ignored
-*/
-
-/* comment */
+var a = "global a";
+var b = "global b";
+var c = "global c";
+{
+  var a = "outer a";
+  var b = "outer b";
+  {
+    var a = "inner a";
+    print a;
+    print b;
+    print c;
+  }
+  print a;
+  print b;
+  print c;
+}
+print a;
+print b;
+print c;

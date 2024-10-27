@@ -1,6 +1,7 @@
 #include <any>
 #include <iostream>
 #include <memory>
+#include <sys/_types/_caddr_t.h>
 #include <vector>
 
 #include "enviroment/Enviroment.hpp"
@@ -16,6 +17,7 @@
 #include "expressions/GroupedExpression.hpp"
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
+#include "statements/BlockStatement.hpp"
 #include "statements/ExpressionStatement.hpp"
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
@@ -70,7 +72,33 @@ std::any Interpreter::visitPrintStatement(const Statement::PrintStatement& print
 std::any Interpreter::visitVarStatement(const Statement::VarStatement& varStatement)
 {
     std::any value = varStatement.value->accept(*this);
-    enviroment.bind(varStatement.identifier, value);
+    environment.bind(varStatement.identifier, value);
+    return nullptr;
+}
+
+std::any Interpreter::visitBlockStatement(const Statement::BlockStatement& blockStatement)
+{
+    // Save the current environment to restore it later
+    Environment previousEnvironment = environment;
+    try
+    {
+        // Create a new environment with the previous environment as the parent
+        environment = Environment(std::make_shared<Environment>(previousEnvironment));
+        for (auto& statement : blockStatement.statements)
+        {
+            statement->accept(*this);
+        }
+        // Restore the previous environment
+        environment = previousEnvironment;
+    }
+    catch (const LoxError& error)
+    {
+        // Restore the previous environment in case of an error
+        environment = previousEnvironment;
+        throw;
+    }
+
+    // Return a null value indicating the end of the block
     return nullptr;
 }
 
@@ -220,7 +248,7 @@ std::any Interpreter::visitLiteralExpression(const Expression::LiteralExpression
 
 std::any Interpreter::visitVariableExpression(const Expression::VariableExpression &variableExpression)
 {
-    return enviroment.read(variableExpression.identifer);
+    return environment.read(variableExpression.identifer);
 }
 
 
@@ -228,6 +256,6 @@ std::any Interpreter::visitAssignmentExpression(const Expression::AssignmentExpr
 {
     // leaky abstraction of "=" token structure
     std::any value = assignmentExpression.value->accept(*this);
-    enviroment.assign(assignmentExpression.idenetifier,value);
+    environment.assign(assignmentExpression.idenetifier,value);
     return value;
 }

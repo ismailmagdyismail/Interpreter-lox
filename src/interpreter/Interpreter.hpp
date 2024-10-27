@@ -28,6 +28,7 @@ private:
     std::any visitExpressionStatement(const Statement::ExpressionStatement& expressionStatement) override;
     std::any visitPrintStatement(const Statement::PrintStatement &printStatement) override;
     std::any visitVarStatement(const Statement::VarStatement &) override;
+    std::any visitBlockStatement(const Statement::BlockStatement &) override;
 
-    Enviroment enviroment;
+    Environment environment;
 };
