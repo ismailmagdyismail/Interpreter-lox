@@ -28,6 +28,7 @@
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
 #include "statements/VarStatement.hpp"
+#include "statements/IfStatement.hpp"
 #include "tokens/Token.hpp"
 
 void Parser::setTokens(const std::vector<Tokens::Token> &tokens)
@@ -129,6 +130,10 @@ std::unique_ptr<Statement::IStatement> Parser::statement(SourceReport::SourceRep
     {
         return blockStatement(reporter);
     }
+    if(current().tokenType == Tokens::TokenType::IF)
+    {
+        return ifStatement(reporter);
+    }
     return expressionStatement(reporter);
 }
 
@@ -154,12 +159,31 @@ std::unique_ptr<Statement::IStatement> Parser::blockStatement(SourceReport::Sour
     {
         blockStatements.push_back(declaration(reporter));
     }
-    if(current().tokenType != Tokens::TokenType::RIGHT_BRACE)
-    {
-        throw ParserError(current(),"Excpected } to end block");
-    }
+    checkToken(Tokens::TokenType::RIGHT_BRACE, "Excpected } to end block", reporter);
     advance() ;// skip }
     return std::make_unique<Statement::BlockStatement>(Statement::BlockStatement(std::move(blockStatements)));
+}
+
+std::unique_ptr<Statement::IStatement> Parser::ifStatement(SourceReport::SourceReporter& reporter)
+{
+    advance(); // skip IF token
+    checkToken(Tokens::TokenType::LEFT_PARNTHESES, "Excepected ( for if statement condition", reporter);
+    advance(); // skip opening (
+    std::unique_ptr<Expression::IExpression> condition = expression(reporter);
+    checkToken(Tokens::TokenType::RIGHT_PARNTHESES, "Excepected closing ) for if statement condition", reporter);
+    advance(); // skip closing )
+    checkToken(Tokens::TokenType::LEFT_BRACE, "Excepected opening { for if statement body", reporter);
+    std::unique_ptr<Statement::IStatement> trueBranchStatements = blockStatement(reporter);
+    std::unique_ptr<Statement::IStatement> falseBranchStatements = nullptr;
+    if(current().tokenType == Tokens::TokenType::ELSE)
+    {
+        advance(); // skip else token
+        checkToken(Tokens::TokenType::LEFT_BRACE, "Excepected opening { for else statement body", reporter);
+        falseBranchStatements = blockStatement(reporter);
+    }
+    return std::make_unique<Statement::IfStatement>(
+        Statement::IfStatement{std::move(condition),std::move(trueBranchStatements),std::move(falseBranchStatements)}
+    );
 }
 
 std::unique_ptr<Statement::IStatement> Parser::expressionStatement(SourceReport::SourceReporter& reporter)
@@ -388,5 +412,15 @@ void Parser::synchronize()
     )
     {
         advance();
+    }
+}
+
+void Parser::checkToken(const Tokens::TokenType& excpectedToknenType, const std::string& errorMessage,SourceReport::SourceReporter& reporter) const
+{
+    if(current().tokenType != excpectedToknenType)
+    {
+        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),errorMessage);
+        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
+        throw ParserError(current(),errorMessage);
     }
 }

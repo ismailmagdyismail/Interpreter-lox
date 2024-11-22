@@ -12,11 +12,12 @@
 #include "statements/IStatement.hpp"
 #include "statements/IStatementVisitor.hpp"
 
-class Interpreter : IExpressionVisitor , IStatementVisitor
+class Interpreter : public IExpressionVisitor , public IStatementVisitor
 {
 public:
     void interpret(const std::vector<std::unique_ptr<Statement::IStatement>>& statements,SourceReport::SourceReporter& reporter);
 private:
+    // expression nodes visitors
     std::any visitUnaryExpression(const Expression::UnaryExpression &unaryExpression) override;
     std::any visitBinaryExpression(const Expression::BinaryExpression &binaryExpression) override;
     std::any visitGroupedExpression(const Expression::GroupedExpression &groupedExpression) override;
@@ -25,10 +26,12 @@ private:
     std::any visitVariableExpression(const Expression::VariableExpression &variableExpression) override;
     std::any visitAssignmentExpression(const Expression::AssignmentExpression &assignmentExpression) override;
 
+    // statement node visitors
     std::any visitExpressionStatement(const Statement::ExpressionStatement& expressionStatement) override;
     std::any visitPrintStatement(const Statement::PrintStatement &printStatement) override;
     std::any visitVarStatement(const Statement::VarStatement &) override;
     std::any visitBlockStatement(const Statement::BlockStatement &) override;
+    std::any visitIfStatement(const Statement::IfStatement&) override;
 
     Environment environment;
 };

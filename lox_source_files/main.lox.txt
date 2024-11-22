@@ -35,3 +35,29 @@ var c = "global c";
 print a;
 print b;
 print c;
+
+if(1==1)
+{
+    print "1 == 1 branch, correct branch ";
+}
+if(1 == 2) {
+    print "wrong branch";
+} else {
+    print "correct branch , 1 !=2 ";
+}
+if(true)
+{
+    if(true)
+    {
+        print "inner conditional block (2) " ;
+    }
+    if(false)
+    {
+        print "wrong branch";
+    }
+    else
+    {
+        print "correct inner else branch (2)";
+    }
+    print "outer conditional block (1) " ;
+}
