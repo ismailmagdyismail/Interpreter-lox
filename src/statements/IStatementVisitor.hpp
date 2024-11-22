@@ -8,6 +8,7 @@ namespace Statement
     class ExpressionStatement;
     class VarStatement;
     class BlockStatement;
+    class IfStatement;
 }
 
 class IStatementVisitor
@@ -17,6 +18,7 @@ public:
     virtual std::any visitExpressionStatement(const Statement::ExpressionStatement&) = 0;
     virtual std::any visitVarStatement(const Statement::VarStatement&) = 0;
     virtual std::any visitBlockStatement(const Statement::BlockStatement&) = 0;
+    virtual std::any visitIfStatement(const Statement::IfStatement&) = 0;
 
     virtual ~IStatementVisitor() = default;
 };

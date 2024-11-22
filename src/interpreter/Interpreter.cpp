@@ -4,27 +4,43 @@
 #include <sys/_types/_caddr_t.h>
 #include <vector>
 
+//! interpreter
+#include "interpreter/Interpreter.hpp"
+
+//! enviroment
 #include "enviroment/Enviroment.hpp"
+
+//! expressions
 #include "expressions/AssignmentExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
-#include "exceptions/LoxError.hpp"
-#include "exceptions/TypeError.hpp"
 #include "expressions/VariableExpression.hpp"
-#include "interpreter/Interpreter.hpp"
 #include "expressions/BinaryExpression.hpp"
 #include "expressions/LiteralExpression.hpp"
 #include "expressions/UnaryExpression.hpp"
 #include "expressions/GroupedExpression.hpp"
+
+//! error reporter
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
+
+//! statements
 #include "statements/BlockStatement.hpp"
 #include "statements/ExpressionStatement.hpp"
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
 #include "statements/VarStatement.hpp"
-#include "stringBuilder/StringBuilder.hpp"
+#include "statements/IfStatement.hpp"
+
+//! types
 #include "tokens/Token.hpp"
 #include "object/Object.hpp"
+
+//! exceptions
+#include "exceptions/LoxError.hpp"
+#include "exceptions/TypeError.hpp"
+
+//! utilites
+#include "stringBuilder/StringBuilder.hpp"
 
 static bool isTruthy(std::any object)
 {
@@ -57,7 +73,7 @@ void Interpreter::interpret(const std::vector<std::unique_ptr<Statement::IStatem
 
 std::any Interpreter::visitExpressionStatement(const Statement::ExpressionStatement& expressionStatement)
 {
-    std::any value = expressionStatement.expression->accept(*this);
+    expressionStatement.expression->accept(*this);
     return nullptr;
 }
 
@@ -101,6 +117,21 @@ std::any Interpreter::visitBlockStatement(const Statement::BlockStatement& block
     // Return a null value indicating the end of the block
     return nullptr;
 }
+
+std::any Interpreter::visitIfStatement(const Statement::IfStatement& ifStatement)
+{
+    std::any conditionResult = ifStatement.condition->accept(*this);
+    if(isTruthy(conditionResult))
+    {
+        ifStatement.trueBranchStatements->accept(*this);
+    }
+    else if(ifStatement.falseBranchStatements.has_value())
+    {
+        ifStatement.falseBranchStatements.value()->accept(*this);
+    }
+    return nullptr;
+}
+
 
 std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {
