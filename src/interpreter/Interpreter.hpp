@@ -41,6 +41,7 @@ private:
     std::any visitBlockStatement(const Statement::BlockStatement &) override;
     std::any visitIfStatement(const Statement::IfStatement&) override;
     std::any visitWhileStatement(const Statement::WhileStatement&) override;
+    std::any visitForStatement(const Statement::ForStatement&) override;
 
     EnvironmentManager environment;
 };

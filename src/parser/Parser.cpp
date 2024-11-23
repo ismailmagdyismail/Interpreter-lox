@@ -39,6 +39,7 @@
 #include "statements/VarStatement.hpp"
 #include "statements/IfStatement.hpp"
 #include "statements/WhileStatement.hpp"
+#include "statements/ForStatement.hpp"
 
 
 //! tokens
@@ -136,6 +137,10 @@ std::unique_ptr<Statement::IStatement> Parser::statement(SourceReport::SourceRep
     {
         return whileStatement(reporter);
     }
+    if(current().tokenType == Tokens::TokenType::FOR)
+    {
+        return forStatement(reporter);
+    }
     return expressionStatement(reporter);
 }
 
@@ -195,6 +200,56 @@ std::unique_ptr<Statement::IStatement> Parser::whileStatement(SourceReport::Sour
     std::unique_ptr<Statement::IStatement> loopBody = blockStatement(reporter);
     return std::make_unique<Statement::WhileStatement>(
         Statement::WhileStatement(std::move(condition),std::move(loopBody))
+    );
+}
+
+std::unique_ptr<Statement::IStatement> Parser::forStatement(SourceReport::SourceReporter& reporter)
+{
+    advance(); // skip for token;
+    checkToken(Tokens::TokenType::LEFT_PARNTHESES,"Excepected opening ( for for loop statement condition",reporter);
+    advance(); // skip (
+    std::unique_ptr<Statement::IStatement> initilization = nullptr;
+    std::unique_ptr<Expression::IExpression> condition = nullptr;
+    std::unique_ptr<Expression::IExpression> increment = nullptr;
+    if(current().tokenType == Tokens::TokenType::VAR)
+    {
+        initilization = varDeclration(reporter);
+    }
+    else if (current().tokenType == Tokens::TokenType::SEMI_COLON)
+    {
+        advance(); // skip ;
+    }
+    else
+    {
+        initilization = expressionStatement(reporter);
+    }
+    if(current().tokenType == Tokens::TokenType::SEMI_COLON)
+    {
+        advance(); //skip ;
+    }
+    else
+    {
+        condition = expression(reporter);
+        advance(); // skip ;
+    }
+    if(current().tokenType == Tokens::TokenType::RIGHT_PARNTHESES)
+    {
+        advance(); // skip )
+    }
+    else
+    {
+        increment = expression(reporter);
+        advance(); // skip ;
+    }
+    checkToken(Tokens::TokenType::LEFT_BRACE,"Excepected opening { for for loop statement body",reporter);
+    std::unique_ptr<Statement::IStatement> loopBody = blockStatement(reporter);
+    return std::make_unique<Statement::ForStatement>(
+        Statement::ForStatement{
+            std::move(initilization),
+            std::move(condition),
+            std::move(increment),
+            std::move(loopBody)
+        }
     );
 }
 

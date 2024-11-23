@@ -52,6 +52,7 @@ add_executable(
     ${src_path}/statements/BlockStatement.cpp
     ${src_path}/statements/IfStatement.cpp
     ${src_path}/statements/WhileStatement.cpp
+    ${src_path}/statements/ForStatement.cpp
     ${src_path}/stringBuilder/StringBuilder.cpp
     ${src_path}/object/Object.cpp
     ${src_path}/interpreter/Interpreter.cpp

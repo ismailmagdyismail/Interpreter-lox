@@ -31,6 +31,7 @@
 #include "statements/VarStatement.hpp"
 #include "statements/IfStatement.hpp"
 #include "statements/WhileStatement.hpp"
+#include "statements/ForStatement.hpp"
 
 //! types
 #include "tokens/Token.hpp"
@@ -135,17 +136,43 @@ std::any Interpreter::visitIfStatement(const Statement::IfStatement& ifStatement
 std::any Interpreter::visitWhileStatement(const Statement::WhileStatement& whileStatement)
 {
     std::any conditionResult = whileStatement.condition->accept(*this);
-    int i = 0 ;
-    while(
-        isTruthy(conditionResult)
-    )
+    while(isTruthy(conditionResult))
     {
         whileStatement.loopBody->accept(*this);
         conditionResult = whileStatement.condition->accept(*this);
-        i++;
     }
     return nullptr;
 }
+
+std::any Interpreter::visitForStatement(const Statement::ForStatement& forStatement)
+{
+    environment.pushScope();
+    if(forStatement.initialization != nullptr)
+    {
+        forStatement.initialization->accept(*this);
+    }
+    std::any conditionResult = true;
+    if(forStatement.condition != nullptr)
+    {
+        conditionResult = forStatement.condition->accept(*this);
+    }
+    while(isTruthy(conditionResult))
+    {
+        forStatement.loopBody->accept(*this);
+        if(forStatement.increment != nullptr)
+        {
+            forStatement.increment->accept(*this);
+        }
+        if(forStatement.condition != nullptr)
+        {
+            conditionResult = forStatement.condition->accept(*this);
+        }
+    }
+    environment.popScope();
+
+    return nullptr;
+}
+
 
 std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {

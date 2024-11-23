@@ -5,12 +5,13 @@
 - Program -> Declaration* EOF;
 - Declaration -> VarDeclaration | Statement;
 - VarDeclaration -> "var" IDENTIFIER "=" expression ";" ;
-- Statement -> ExpressionStatement | PrintStatement | BlockStatement | IfStatement | WhileStatement;
+- Statement -> ExpressionStatement | PrintStatement | BlockStatement | IfStatement | WhileStatement | ForStatement;
 - ExpressionStatement -> Expression ":" ;
 - PrintStatement -> "print" expression ";" ;
 - BlockStatement -> "{" Declaration* "}" ;
 - IfStatement -> "if" "(" expression  ")" "{" BlockStatement "}" ("else" "{" statement "}") ? ;
 - WhileStatement -> "while" "(" expression ")" "{" BlockStatement "}" ;
+- ForStatement -> "for" "(" (VarDeclaration | ExpressionStatement | ";" )?  expression? ";" expression? ")" "{" BlockStatement "}" ;
 - Expression -> Assignment ;
 - Assignment -> IDENTIFIER "=" assignment | equality ;
 - Ternary -> Equality ( "?" Equality ":" Equality )* ;

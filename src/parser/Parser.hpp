@@ -43,6 +43,7 @@ private:
     std::unique_ptr<Statement::IStatement> expressionStatement(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Statement::IStatement> ifStatement(SourceReport::SourceReporter& reporter);
     std::unique_ptr<Statement::IStatement> whileStatement(SourceReport::SourceReporter& reporter);
+    std::unique_ptr<Statement::IStatement> forStatement(SourceReport::SourceReporter& reporter);
 
     void checkToken(const Tokens::TokenType& excpectedToknenType, const std::string& errorMessage,SourceReport::SourceReporter& reporter)const;
     unsigned int currentIndex;

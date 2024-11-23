@@ -10,6 +10,7 @@ namespace Statement
     class BlockStatement;
     class IfStatement;
     class WhileStatement;
+    class ForStatement;
 }
 
 class IStatementVisitor
@@ -21,6 +22,7 @@ public:
     virtual std::any visitBlockStatement(const Statement::BlockStatement&) = 0;
     virtual std::any visitIfStatement(const Statement::IfStatement&) = 0;
     virtual std::any visitWhileStatement(const Statement::WhileStatement&) = 0 ;
+    virtual std::any visitForStatement(const Statement::ForStatement&) = 0 ;
 
     virtual ~IStatementVisitor() = default;
 };
