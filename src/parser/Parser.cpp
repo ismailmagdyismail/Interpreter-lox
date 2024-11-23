@@ -107,28 +107,13 @@ std::unique_ptr<Statement::IStatement> Parser::declaration(SourceReport::SourceR
 std::unique_ptr<Statement::IStatement> Parser::varDeclration(SourceReport::SourceReporter& reporter)
 {
     advance(); // skip var keyword
-    if(current().tokenType != Tokens::TokenType::IDENTFIER)
-    {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excpected IDENTFIER");
-        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-        throw ParserError(current(),"Excpected IDENTFIER");
-    }
+    checkToken(Tokens::TokenType::IDENTFIER,"Excpected IDENTFIER",reporter);
     Tokens::Token identifier = current();
     advance(); // skipt Identifier
-    if(current().tokenType != Tokens::TokenType::ASSIGN)
-    {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excpected =");
-        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-        throw ParserError(current(),"Excpected =");
-    }
+    checkToken(Tokens::TokenType::ASSIGN,"Excpected =",reporter);
     advance(); // skip =
     auto value = expression(reporter);
-    if(current().tokenType != Tokens::TokenType::SEMI_COLON)
-    {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excpected ;");
-        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-        throw ParserError(current(),"Excpected ;");
-    }
+    checkToken(Tokens::TokenType::SEMI_COLON,"Excpected ;",reporter);
     advance(); // skip ;
     return std::make_unique<Statement::VarStatement>(identifier,std::move(value));
 }
@@ -158,12 +143,7 @@ std::unique_ptr<Statement::IStatement> Parser::printStatement(SourceReport::Sour
 {
     advance(); // skip print token
     std::unique_ptr<Expression::IExpression> parsedExpression = expression(reporter);
-    if(current().tokenType != Tokens::TokenType::SEMI_COLON)
-    {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excepected ;");
-        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-        throw ParserError(current(),"Excepected ;");
-    }
+    checkToken(Tokens::TokenType::SEMI_COLON,"Excepected ;",reporter);
     advance(); // skip ;
     return std::make_unique<Statement::PrintStatement>(std::move(parsedExpression));
 }
@@ -221,12 +201,7 @@ std::unique_ptr<Statement::IStatement> Parser::whileStatement(SourceReport::Sour
 std::unique_ptr<Statement::IStatement> Parser::expressionStatement(SourceReport::SourceReporter& reporter)
 {
     std::unique_ptr<Expression::IExpression> parsedExpression = expression(reporter);
-    if(current().tokenType != Tokens::TokenType::SEMI_COLON)
-    {
-        SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Excepected ;");
-        reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-        throw ParserError(current(),"Excepected ;");
-    }
+    checkToken(Tokens::TokenType::SEMI_COLON,"Excpected ;",reporter);
     advance(); // skip ;
     return std::make_unique<Statement::ExpressionStatement>(std::move(parsedExpression));
 }
@@ -259,12 +234,7 @@ std::unique_ptr<Expression::IExpression> Parser::ternary(SourceReport::SourceRep
     {
         advance(); // skip ?
         std::unique_ptr<Expression::IExpression> truthBranch = equality(reporter);
-        if(current().tokenType != Tokens::TokenType::COLON)
-        {
-            SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"Expect :");
-            reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-            throw ParserError(current(),"No : was found for ternary operatry");
-        }
+        checkToken(Tokens::TokenType::COLON,"Excpected :",reporter);
         advance(); // skip :
         std::unique_ptr<Expression::IExpression> falseBranch = equality(reporter);
         expression = std::make_unique<Expression::TernaryExpression>(
@@ -411,12 +381,7 @@ std::unique_ptr<Expression::IExpression> Parser::primary(SourceReport::SourceRep
     {
         advance(); // skip starting (
         std::unique_ptr<Expression::IExpression> groupedExpression = expression(reporter);
-        if(current().tokenType != Tokens::TokenType::RIGHT_PARNTHESES)
-        {
-            SourceReport::LineError lineError(SourceReport::LineDescriptor(current().lineNumber),"No closing ) was found");
-            reporter.addMessage(std::make_unique<SourceReport::LineError>(lineError));
-            throw ParserError(current(),"No closing ) was found");
-        }
+        checkToken(Tokens::TokenType::RIGHT_PARNTHESES,"No closing ) was found",reporter);
         advance(); // skip ending )
         return std::make_unique<Expression::GroupedExpression>(
             Expression::GroupedExpression(std::move(groupedExpression))
