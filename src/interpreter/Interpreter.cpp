@@ -30,6 +30,7 @@
 #include "statements/PrintStatement.hpp"
 #include "statements/VarStatement.hpp"
 #include "statements/IfStatement.hpp"
+#include "statements/WhileStatement.hpp"
 
 //! types
 #include "tokens/Token.hpp"
@@ -95,22 +96,21 @@ std::any Interpreter::visitVarStatement(const Statement::VarStatement& varStatem
 std::any Interpreter::visitBlockStatement(const Statement::BlockStatement& blockStatement)
 {
     // Save the current environment to restore it later
-    Environment previousEnvironment = environment;
     try
     {
         // Create a new environment with the previous environment as the parent
-        environment = Environment(std::make_shared<Environment>(previousEnvironment));
+        environment.pushScope();
         for (auto& statement : blockStatement.statements)
         {
             statement->accept(*this);
         }
         // Restore the previous environment
-        environment = previousEnvironment;
+        environment.popScope();
     }
     catch (const LoxError& error)
     {
         // Restore the previous environment in case of an error
-        environment = previousEnvironment;
+        environment.popScope();
         throw;
     }
 
@@ -132,6 +132,20 @@ std::any Interpreter::visitIfStatement(const Statement::IfStatement& ifStatement
     return nullptr;
 }
 
+std::any Interpreter::visitWhileStatement(const Statement::WhileStatement& whileStatement)
+{
+    std::any conditionResult = whileStatement.condition->accept(*this);
+    int i = 0 ;
+    while(
+        isTruthy(conditionResult)
+    )
+    {
+        whileStatement.loopBody->accept(*this);
+        conditionResult = whileStatement.condition->accept(*this);
+        i++;
+    }
+    return nullptr;
+}
 
 std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {

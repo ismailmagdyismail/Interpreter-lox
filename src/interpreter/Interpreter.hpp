@@ -4,11 +4,19 @@
 #include <memory>
 
 
+//! environment
 #include "enviroment/Enviroment.hpp"
-#include "expressions/AssignmentExpression.hpp"
+#include "enviroment/EnviromentManager.hpp"
+
+
+//! expressions
 #include "expressions/IExpression.hpp"
 #include "expressions/IExpressionVisitor.hpp"
+
+//! reporter
 #include "sourceReporter/SourceReporter.hpp"
+
+//! statements
 #include "statements/IStatement.hpp"
 #include "statements/IStatementVisitor.hpp"
 
@@ -32,6 +40,7 @@ private:
     std::any visitVarStatement(const Statement::VarStatement &) override;
     std::any visitBlockStatement(const Statement::BlockStatement &) override;
     std::any visitIfStatement(const Statement::IfStatement&) override;
+    std::any visitWhileStatement(const Statement::WhileStatement&) override;
 
-    Environment environment;
+    EnvironmentManager environment;
 };

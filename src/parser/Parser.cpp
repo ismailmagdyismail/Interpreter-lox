@@ -1,3 +1,4 @@
+// system imports
 #include <algorithm>
 #include <cstddef>
 #include <exception>
@@ -9,26 +10,38 @@
 #include <utility>
 #include <vector>
 
+//! exceptions
 #include "exceptions/ParserError.hpp"
+
+//! expressions
 #include "expressions/AssignmentExpression.hpp"
 #include "expressions/GroupedExpression.hpp"
 #include "expressions/LiteralExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
 #include "expressions/VariableExpression.hpp"
-#include "parser/Parser.hpp"
-#include "Parser.hpp"
 #include "expressions/BinaryExpression.hpp"
 #include "expressions/IExpression.hpp"
 #include "expressions/UnaryExpression.hpp"
+
+//! parser
+#include "parser/Parser.hpp"
+
+//! reporting
 #include "sourceReporter/IReportMessage.hpp"
 #include "sourceReporter/LineError.hpp"
 #include "sourceReporter/SourceReporter.hpp"
+
+//! statements
 #include "statements/BlockStatement.hpp"
 #include "statements/ExpressionStatement.hpp"
 #include "statements/IStatement.hpp"
 #include "statements/PrintStatement.hpp"
 #include "statements/VarStatement.hpp"
 #include "statements/IfStatement.hpp"
+#include "statements/WhileStatement.hpp"
+
+
+//! tokens
 #include "tokens/Token.hpp"
 
 void Parser::setTokens(const std::vector<Tokens::Token> &tokens)
@@ -134,6 +147,10 @@ std::unique_ptr<Statement::IStatement> Parser::statement(SourceReport::SourceRep
     {
         return ifStatement(reporter);
     }
+    if(current().tokenType == Tokens::TokenType::WHILE)
+    {
+        return whileStatement(reporter);
+    }
     return expressionStatement(reporter);
 }
 
@@ -183,6 +200,21 @@ std::unique_ptr<Statement::IStatement> Parser::ifStatement(SourceReport::SourceR
     }
     return std::make_unique<Statement::IfStatement>(
         Statement::IfStatement{std::move(condition),std::move(trueBranchStatements),std::move(falseBranchStatements)}
+    );
+}
+
+std::unique_ptr<Statement::IStatement> Parser::whileStatement(SourceReport::SourceReporter& reporter)
+{
+    advance(); // skip starting while token
+    checkToken(Tokens::TokenType::LEFT_PARNTHESES,"Excepected opening ( for while statement condition",reporter);
+    advance();
+    std::unique_ptr<Expression::IExpression> condition = expression(reporter);
+    checkToken(Tokens::TokenType::RIGHT_PARNTHESES,"Excepected closing ) for while statement condition",reporter);
+    advance();
+    checkToken(Tokens::TokenType::LEFT_BRACE, "Excepected opening { for while loop statement body", reporter);
+    std::unique_ptr<Statement::IStatement> loopBody = blockStatement(reporter);
+    return std::make_unique<Statement::WhileStatement>(
+        Statement::WhileStatement(std::move(condition),std::move(loopBody))
     );
 }
 
