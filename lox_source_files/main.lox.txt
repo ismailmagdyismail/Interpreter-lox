@@ -101,3 +101,12 @@ for(var i = 0 ;i<5;i = i + 1 )
 }
 
 // print i ; this should error , since it is declerated for for loop statement only
+
+
+print 10 == 10 ? "10 == 10 ternary" : " 10 != 10 ternary" ;
+print 10 != 10 ? "10 != 10 ternary" : 10 == 10 ? "10 == 10 nested ternary" : "10 != 10 nested ternary" ;
+
+if(10 == 10 ? true : false)
+{
+    print "conditional test";
+}

@@ -13,7 +13,7 @@
 - WhileStatement -> "while" "(" expression ")" "{" BlockStatement "}" ;
 - ForStatement -> "for" "(" (VarDeclaration | ExpressionStatement | ";" )?  expression? ";" expression? ")" "{" BlockStatement "}" ;
 - Expression -> Assignment ;
-- Assignment -> IDENTIFIER "=" assignment | equality ;
+- Assignment -> IDENTIFIER "=" assignment | Ternary ;
 - Ternary -> Equality ( "?" Equality ":" Equality )* ;
 - Equality -> Comparison (("!=" | "==" ) Comparison)* ;
 - Comparison -> Term ( (">=" | ">" | "<" | "<=" ) Term)* ;
