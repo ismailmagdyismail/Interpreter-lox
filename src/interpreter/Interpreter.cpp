@@ -52,6 +52,10 @@ static bool isTruthy(std::any object)
     {
         return false;
     }
+    if(object.type() == typeid(std::nullptr_t))
+    {
+        return false;
+    }
     if(object.type() == typeid(bool))
     {
         return std::any_cast<bool>(object);

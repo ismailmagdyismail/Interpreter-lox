@@ -146,3 +146,7 @@ if (false or (true and true))
 {
     print "false or (true and true)";
 }
+
+
+print nil or "not nil";
+print "yes" or 2 ;
