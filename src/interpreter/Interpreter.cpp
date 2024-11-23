@@ -18,6 +18,8 @@
 #include "expressions/LiteralExpression.hpp"
 #include "expressions/UnaryExpression.hpp"
 #include "expressions/GroupedExpression.hpp"
+#include "expressions/LogicExpression.hpp"
+
 
 //! error reporter
 #include "sourceReporter/IReportMessage.hpp"
@@ -126,9 +128,9 @@ std::any Interpreter::visitIfStatement(const Statement::IfStatement& ifStatement
     {
         ifStatement.trueBranchStatements->accept(*this);
     }
-    else if(ifStatement.falseBranchStatements.has_value())
+    else if(ifStatement.falseBranchStatements != nullptr)
     {
-        ifStatement.falseBranchStatements.value()->accept(*this);
+        ifStatement.falseBranchStatements->accept(*this);
     }
     return nullptr;
 }
@@ -173,6 +175,29 @@ std::any Interpreter::visitForStatement(const Statement::ForStatement& forStatem
     return nullptr;
 }
 
+std::any Interpreter::visitLogicExpression(const Expression::LogicExpression &logicExpression)
+{
+    auto lhs = logicExpression.leftExpression->accept(*this);
+    if(logicExpression.logicalOperator.tokenType == Tokens::TokenType::OR)
+    {
+        if(isTruthy(lhs))
+        {
+            return lhs;
+        }
+    }
+    else if(logicExpression.logicalOperator.tokenType == Tokens::TokenType::AND)
+    {
+        if(!isTruthy(lhs))
+        {
+            return lhs;
+        }
+    }
+    else
+    {
+        throw TypeError(logicExpression.logicalOperator,"Logical Operator Not recognized");
+    }
+    return logicExpression.rightExpression->accept(*this);
+}
 
 std::any Interpreter::visitBinaryExpression(const Expression::BinaryExpression &binaryExpression)
 {

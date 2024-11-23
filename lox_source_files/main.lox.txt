@@ -110,3 +110,39 @@ if(10 == 10 ? true : false)
 {
     print "conditional test";
 }
+
+if(true){
+    print "true";
+}
+
+if(false or true){
+    print "false or true";
+}
+
+if(true or false) {
+    print "true or false";
+}
+
+if(false or false) {
+    print "not print ";
+}
+
+if(true and true)
+{
+    print "true && true";
+}
+
+if(true and false)
+{
+    print "true && false";
+}
+
+if(false and true)
+{
+    print "false && true";
+}
+
+if (false or (true and true))
+{
+    print "false or (true and true)";
+}

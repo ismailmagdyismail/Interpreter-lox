@@ -33,6 +33,7 @@ private:
     std::any visitTernaryExpression(const Expression::TernaryExpression &ternaryExpression) override;
     std::any visitVariableExpression(const Expression::VariableExpression &variableExpression) override;
     std::any visitAssignmentExpression(const Expression::AssignmentExpression &assignmentExpression) override;
+    std::any visitLogicExpression(const Expression::LogicExpression &assignmentExpression) override;
 
     // statement node visitors
     std::any visitExpressionStatement(const Statement::ExpressionStatement& expressionStatement) override;

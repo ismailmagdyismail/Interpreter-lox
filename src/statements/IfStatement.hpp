@@ -21,6 +21,6 @@ namespace Statement
         std::any accept(IStatementVisitor &visitor) const override;
         std::unique_ptr<Expression::IExpression> condition;
         std::unique_ptr<Statement::IStatement> trueBranchStatements;
-        std::optional<std::unique_ptr<Statement::IStatement>>falseBranchStatements;
+        std::unique_ptr<Statement::IStatement>falseBranchStatements;
     };
 }

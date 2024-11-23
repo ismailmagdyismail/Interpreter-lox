@@ -45,6 +45,7 @@ add_executable(
     ${src_path}/expressions/TernaryExpression.cpp
     ${src_path}/expressions/VariableExpression.cpp
     ${src_path}/expressions/AssignmentExpression.cpp
+    ${src_path}/expressions/LogicExpression.cpp
     ${src_path}/expressionsFormatter/ExpressionPrinter.cpp
     ${src_path}/statements/ExpressionStatement.cpp
     ${src_path}/statements/PrintStatement.cpp

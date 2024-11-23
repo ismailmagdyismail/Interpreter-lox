@@ -14,7 +14,9 @@
 - ForStatement -> "for" "(" (VarDeclaration | ExpressionStatement | ";" )?  expression? ";" expression? ")" "{" BlockStatement "}" ;
 - Expression -> Assignment ;
 - Assignment -> IDENTIFIER "=" assignment | Ternary ;
-- Ternary -> Equality ( "?" Equality ":" Equality )* ;
+- Ternary -> Logic_or ( "?" Logic_or ":" Logic_or )* ;
+- Logic_or -> Logic_and ( "or" Logic_and )* ;
+- Logic_and -> Equality ( "and" Equality )* ;
 - Equality -> Comparison (("!=" | "==" ) Comparison)* ;
 - Comparison -> Term ( (">=" | ">" | "<" | "<=" ) Term)* ;
 - Term -> Factor ( ("+" | "-") Factor)* ;

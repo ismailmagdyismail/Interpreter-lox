@@ -22,6 +22,8 @@
 #include "expressions/BinaryExpression.hpp"
 #include "expressions/IExpression.hpp"
 #include "expressions/UnaryExpression.hpp"
+#include "expressions/LogicExpression.hpp"
+
 
 //! parser
 #include "parser/Parser.hpp"
@@ -284,19 +286,58 @@ std::unique_ptr<Expression::IExpression> Parser::assignment(SourceReport::Source
 
 std::unique_ptr<Expression::IExpression> Parser::ternary(SourceReport::SourceReporter& reporter)
 {
-    std::unique_ptr<Expression::IExpression> expression = equality(reporter);
+    std::unique_ptr<Expression::IExpression> expression = logicOR(reporter);
     while (current().tokenType == Tokens::TokenType::QUESTION_MARK)
     {
         advance(); // skip ?
-        std::unique_ptr<Expression::IExpression> truthBranch = equality(reporter);
+        std::unique_ptr<Expression::IExpression> truthBranch = logicOR(reporter);
         checkToken(Tokens::TokenType::COLON,"Excpected :",reporter);
         advance(); // skip :
-        std::unique_ptr<Expression::IExpression> falseBranch = equality(reporter);
+        std::unique_ptr<Expression::IExpression> falseBranch = logicOR(reporter);
         expression = std::make_unique<Expression::TernaryExpression>(
             Expression::TernaryExpression(std::move(expression),std::move(truthBranch),std::move(falseBranch))
         );
     }
     return expression;
+}
+
+std::unique_ptr<Expression::IExpression> Parser::logicOR(SourceReport::SourceReporter& reporter)
+{
+    std::unique_ptr<Expression::IExpression> lhs = logicAnd(reporter);
+    while(current().tokenType == Tokens::TokenType::OR)
+    {
+        Tokens::Token logicalOrToken = current();
+        advance(); //! skip OR
+        std::unique_ptr<Expression::IExpression> rhs = logicAnd(reporter);
+        lhs = std::make_unique<Expression::LogicExpression>(
+            Expression::LogicExpression {
+                std::move(lhs),
+                std::move(logicalOrToken),
+                std::move(rhs)
+            }
+        );
+    }
+    return lhs;
+}
+
+
+std::unique_ptr<Expression::IExpression> Parser::logicAnd(SourceReport::SourceReporter& reporter)
+{
+    std::unique_ptr<Expression::IExpression> lhs = equality(reporter);
+    while(current().tokenType == Tokens::TokenType::AND)
+    {
+        Tokens::Token logicalAndToken = current();
+        advance(); //! skip AND
+        std::unique_ptr<Expression::IExpression> rhs = equality(reporter);
+        lhs = std::make_unique<Expression::LogicExpression>(
+            Expression::LogicExpression {
+                std::move(lhs),
+                std::move(logicalAndToken),
+                std::move(rhs)
+            }
+        );
+    }
+    return lhs;
 }
 
 std::unique_ptr<Expression::IExpression> Parser::equality(SourceReport::SourceReporter& reporter)

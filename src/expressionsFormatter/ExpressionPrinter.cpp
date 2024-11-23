@@ -2,6 +2,7 @@
 #include <iostream>
 #include <variant>
 
+//! epxressions
 #include "expressions/LiteralExpression.hpp"
 #include "expressions/VariableExpression.hpp"
 #include "expressionsFormatter/ExpressionPrinter.hpp"
@@ -10,7 +11,14 @@
 #include "expressions/GroupedExpression.hpp"
 #include "expressions/TernaryExpression.hpp"
 #include "expressions/AssignmentExpression.hpp"
+#include "expressions/LogicExpression.hpp"
+
+
+//! utilites
+//!  string builder
 #include "stringBuilder/StringBuilder.hpp"
+
+//! object
 #include "object/Object.hpp"
 
 
@@ -95,4 +103,17 @@ std::any ExpressionPrinter::visitAssignmentExpression(const Expression::Assignme
            .add(value)
            .add(")")
            .build();
+}
+
+
+std::any ExpressionPrinter::visitLogicExpression(const Expression::LogicExpression &assignmentExpression)
+{
+    // std::string value = Object::toString(assignmentExpression.accept(*this));
+    // return StringBuilder()
+    //        .add("(")
+    //        .add(assignmentExpression.idenetifier.lexeme)
+    //        .add("=")
+    //        .add(value)
+    //        .add(")")
+    //        .build();
 }
