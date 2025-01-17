@@ -96,48 +96,36 @@ namespace Tokens
         return isSingleCharToken(lexeme) || isTwoCharToken(lexeme) || isKeyword(lexeme);
     }
 
-    Token createToken(const TokenType &tokenType,const std::string& lexeme,const unsigned int& lineNumber)
+    Token createToken(const TokenType &tokenType, const std::string &lexeme, const unsigned int &lineNumber)
     {
-        // TODO: should add checks to avoid creating a reserved token with a lexeme that doesn't match it
-        // This problem would happend if two diff classes of tokens exist
         return Token{
-            .tokenType = tokenType,
-            .lexeme = lexeme,
-            .lineNumber = lineNumber,
+            tokenType,
+            lineNumber,
+            lexeme
         };
     }
 
-    Token createToken(const std::string& lexeme,const unsigned int& lineNumber)
+    Token createToken(const std::string &lexeme, const unsigned int &lineNumber)
     {
-
-        if(isSingleCharToken(lexeme))
+        Token token;
+        token.lexeme = lexeme;
+        token.lineNumber = lineNumber;
+        if (isSingleCharToken(lexeme))
         {
-            return Token{
-                .tokenType = singleCharTokens[lexeme],
-                .lexeme = lexeme,
-                .lineNumber = lineNumber,
-            };
+            token.tokenType = singleCharTokens[lexeme];
         }
-        if(isTwoCharToken(lexeme))
+        else if (isTwoCharToken(lexeme))
         {
-            return Token{
-                .tokenType = twoCharTokens[lexeme],
-                .lexeme = lexeme,
-                .lineNumber = lineNumber,
-            };
+            token.tokenType = twoCharTokens[lexeme];
         }
-        if(isKeyword(lexeme))
+        else if (isKeyword(lexeme))
         {
-            return Token{
-                .tokenType = keyWordsTokens[lexeme],
-                .lexeme = lexeme,
-                .lineNumber = lineNumber,
-            };
+            token.tokenType = keyWordsTokens[lexeme];
         }
-        return {
-            .tokenType = TokenType::IDENTFIER,
-            .lexeme = lexeme,
-            .lineNumber = lineNumber,
-        };
+        else {
+            token.tokenType = TokenType::IDENTFIER;
+        }
+        return token;
     }
+
 }
