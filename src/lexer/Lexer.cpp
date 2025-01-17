@@ -80,13 +80,9 @@ std::vector<Tokens::Token> Lexer::scan(SourceReport::SourceReporter& reporter)
 {
     while (!atEnd())
     {
-        if(isWhiteSpace(current()))
+        if(isWhiteSpace(current()) || isNewLine(current()))
         {
-            advance();
-        }
-        else if(isNewLine(current()))
-        {
-            this->lineNumber++;
+            this->lineNumber += isNewLine(current());
             advance();
         }
         else if(Tokens::isSingleCharToken(std::string(1,current())))
@@ -163,10 +159,7 @@ void Lexer::scanMultiLineComment(SourceReport::SourceReporter& reporter)
         !Tokens::isMultiLineCommentEnd(std::string(1,current()) + peekNext())
     )
     {
-        if(current() == '\n')
-        {
-            this->lineNumber++;
-        }
+        this->lineNumber += isNewLine(current());
         advance();
     }
     if(atEnd())
