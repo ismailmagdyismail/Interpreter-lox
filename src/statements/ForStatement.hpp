@@ -5,7 +5,7 @@
 
 //! expressions
 #include "expressions/IExpression.hpp"
-
+#include <memory>
 class IStatementVisitor;
 
 namespace Statement
