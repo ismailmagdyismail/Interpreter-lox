@@ -1,5 +1,7 @@
 #include <any>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 #define PRECISON 5
 
@@ -13,7 +15,9 @@ namespace Object
             return std::to_string(std::any_cast<int>(value));
         }
         if (value.type() == typeid(double)) {
-            return std::to_string(std::any_cast<double>(value)).substr(0,PRECISON);
+            std::ostringstream stream;
+            stream << std::fixed << std::setprecision(PRECISON) << std::any_cast<double>(value);
+            return stream.str();
         }
         if (value.type() == typeid(std::string)) {
             return std::any_cast<std::string>(value);

@@ -2,7 +2,7 @@
 
 #include "expressions/IExpression.hpp"
 #include "tokens/Token.hpp"
-
+#include <memory>
 class IExpressionVisitor;
 
 namespace Expression
